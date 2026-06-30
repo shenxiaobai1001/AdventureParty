@@ -1,0 +1,17 @@
+# 忽略根目录下除指定文件夹外的所有内容
+/*
+
+# 保留 .gitignore 本身
+!.gitignore
+
+# 保留以下 Unity 项目目录
+!/Assets/
+!/Packages/
+!/ProjectSettings/
+!/UserSettings/
+
+# 保留上述目录内的所有文件
+!/Assets/**
+!/Packages/**
+!/ProjectSettings/**
+!/UserSettings/**

@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - wall
+  - Kid
+  - Car
+  - Block
+  - TCQL
+  - TCJ
+  - QLB
+  - roadPass
+  - Banana
+  - CarCheck
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - UISprite
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: background
+    uniqueID: 3416083565
+    locked: 0
+  - name: map
+    uniqueID: 3415735329
+    locked: 0
+  - name: Item
+    uniqueID: 620632933
+    locked: 0
+  - name: Block
+    uniqueID: 1407727623
+    locked: 0
+  - name: Player
+    uniqueID: 1531980497
+    locked: 0
+  - name: Kid
+    uniqueID: 1045736035
+    locked: 0
+  - name: Effect
+    uniqueID: 425746865
+    locked: 0
+  - name: UI
+    uniqueID: 1274820813
+    locked: 0
+  - name: UISprite
+    uniqueID: 2312734543
+    locked: 0
+  - name: Video
+    uniqueID: 4163125227
+    locked: 0
