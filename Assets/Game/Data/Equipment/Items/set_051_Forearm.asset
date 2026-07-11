@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_051_Forearm
+  m_EditorClassIdentifier: 
+  itemName: Preset_51 Forearm
+  description: Preset_51 Forearm
+  price: 0
+  weight: 2
+  itemType: 31
+  size:
+    width: 2
+    height: 3
+  icon: {fileID: 21300000, guid: 21301d8593dd8a043bbc2b5fc463ec68, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 5104
+  setId: 51
+  equipmentSlot: 4
+  parts: Chr_ArmLowerRight_Male_13;Chr_ArmLowerLeft_Male_13;Chr_HandRight_Male_12;Chr_HandLeft_Male_01
+  worldPickupPrefab: {fileID: 5543681206574249741, guid: 43a4d0af425e7e3488d44704cd05500b, type: 3}

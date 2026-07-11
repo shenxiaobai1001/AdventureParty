@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_077_Body
+  m_EditorClassIdentifier: 
+  itemName: Preset_77 Body
+  description: Preset_77 Body
+  price: 0
+  weight: 5
+  itemType: 28
+  size:
+    width: 4
+    height: 6
+  icon: {fileID: 21300000, guid: f17c432375cfbe24fbfff11704437b06, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 7702
+  setId: 77
+  equipmentSlot: 2
+  parts: Chr_Torso_Male_11;Chr_ArmUpperRight_Male_16;Chr_ArmUpperLeft_Male_00
+  worldPickupPrefab: {fileID: 2975885560826177008, guid: a3fd615a6dac4fa49bb97b06d1400c06, type: 3}

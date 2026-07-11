@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_100_Hips
+  m_EditorClassIdentifier: 
+  itemName: Preset_100 Hips
+  description: Preset_100 Hips
+  price: 0
+  weight: 3
+  itemType: 29
+  size:
+    width: 4
+    height: 5
+  icon: {fileID: 21300000, guid: 5c83ab9eaf3be1640bb32aa7defd5c17, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 10005
+  setId: 100
+  equipmentSlot: 5
+  parts: Chr_HipsAttachment_01;Chr_Hips_Female_23
+  worldPickupPrefab: {fileID: 6264179540590407975, guid: 520973b59be95ec47aa0a4b452024de2, type: 3}

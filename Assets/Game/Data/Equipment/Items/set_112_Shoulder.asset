@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_112_Shoulder
+  m_EditorClassIdentifier: 
+  itemName: Preset_112 Shoulder
+  description: Preset_112 Shoulder
+  price: 0
+  weight: 2
+  itemType: 27
+  size:
+    width: 2
+    height: 2
+  icon: {fileID: 21300000, guid: 3cb9614c51a94064893ec16e58817e47, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 11203
+  setId: 112
+  equipmentSlot: 3
+  parts: Chr_ShoulderAttachRight_10
+  worldPickupPrefab: {fileID: 3619668493908371333, guid: 7875d7c5716a81948960374cc51c98fb, type: 3}

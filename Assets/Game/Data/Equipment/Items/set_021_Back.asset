@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_021_Back
+  m_EditorClassIdentifier: 
+  itemName: Preset_21 Back
+  description: Preset_21 Back
+  price: 0
+  weight: 2
+  itemType: 32
+  size:
+    width: 4
+    height: 3
+  icon: {fileID: 21300000, guid: cfc54f3b43759b94fae91d2ba0835b20, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 2107
+  setId: 21
+  equipmentSlot: 7
+  parts: Chr_BackAttachment_01
+  worldPickupPrefab: {fileID: 8478422017537610794, guid: eb688ebe56637dd4dbd9110d20c9524e, type: 3}

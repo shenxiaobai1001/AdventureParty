@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_092_Body
+  m_EditorClassIdentifier: 
+  itemName: Preset_92 Body
+  description: Preset_92 Body
+  price: 0
+  weight: 5
+  itemType: 28
+  size:
+    width: 4
+    height: 6
+  icon: {fileID: 21300000, guid: 8bdfe0fabe54c06429cb1543cdaf22f8, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 9202
+  setId: 92
+  equipmentSlot: 2
+  parts: Chr_Torso_Female_18;Chr_ArmUpperRight_Female_00;Chr_ArmUpperLeft_Female_00
+  worldPickupPrefab: {fileID: 7345998520127011930, guid: 5f715ab70d5984a4aafa5dbb87ed17af, type: 3}

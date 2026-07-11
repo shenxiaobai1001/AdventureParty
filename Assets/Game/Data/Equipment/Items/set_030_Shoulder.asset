@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_030_Shoulder
+  m_EditorClassIdentifier: 
+  itemName: Preset_30 Shoulder
+  description: Preset_30 Shoulder
+  price: 0
+  weight: 2
+  itemType: 27
+  size:
+    width: 2
+    height: 2
+  icon: {fileID: 21300000, guid: ca8dd46e58c1112408ced79fd73a38ff, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 3003
+  setId: 30
+  equipmentSlot: 3
+  parts: Chr_ShoulderAttachRight_13;Chr_ShoulderAttachLeft_13
+  worldPickupPrefab: {fileID: 532938177561208396, guid: 1ec0aac2fb7c70444a0bf776d385b927, type: 3}

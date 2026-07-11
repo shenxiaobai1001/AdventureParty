@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_032_Body
+  m_EditorClassIdentifier: 
+  itemName: Preset_32 Body
+  description: Preset_32 Body
+  price: 0
+  weight: 5
+  itemType: 28
+  size:
+    width: 4
+    height: 6
+  icon: {fileID: 21300000, guid: 1b4e454e5aa11844a9d3aaab892944db, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 3202
+  setId: 32
+  equipmentSlot: 2
+  parts: Chr_Torso_Male_28;Chr_ArmUpperRight_Male_03;Chr_ArmUpperLeft_Male_04
+  worldPickupPrefab: {fileID: 3763317337624501286, guid: 073efb8b457e9b34b80f41c75569e701, type: 3}

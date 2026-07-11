@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5410cf9e99c41324e8933dd9dbb28b74, type: 3}
+  m_Name: set_078_Back
+  m_EditorClassIdentifier: 
+  itemName: Preset_78 Back
+  description: Preset_78 Back
+  price: 0
+  weight: 2
+  itemType: 32
+  size:
+    width: 4
+    height: 3
+  icon: {fileID: 21300000, guid: 05503257184582e44bbd5e58a3102228, type: 3}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  equipmentItemId: 7807
+  setId: 78
+  equipmentSlot: 7
+  parts: Chr_BackAttachment_12
+  worldPickupPrefab: {fileID: 4590642525728157248, guid: 47b8804b703b0e84b88e8b9929cdc024, type: 3}
