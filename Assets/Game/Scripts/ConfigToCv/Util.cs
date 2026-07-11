@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
@@ -12,6 +12,12 @@ public static class Util
         int lp = path.LastIndexOf(".");
         string realPath = lp < 0 ? path : path.Remove(lp);
         TextAsset data = Loaded.Load<TextAsset>(realPath);
+        if (data == null)
+        {
+            UnityEngine.Debug.LogError("Load Config File Error:" + path);
+            return null;
+        }
+
         TextReader reader = new StringReader(data.text);
         retSteam = reader;
         return retSteam;

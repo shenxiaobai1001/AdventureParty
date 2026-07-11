@@ -45,17 +45,35 @@ public static class Loaded
             filename = $"{resourcePath}ScriptableObject/{url}";
         }
 
-        var handle = YooUpdateManager.MainPackage.LoadAssetSync<T>(filename/*.ToLower()*/);
+        if (YooUpdateManager.MainPackage != null)
+        {
+            var handle = YooUpdateManager.MainPackage.LoadAssetSync<T>(filename);
+            if (handle?.AssetObject != null)
+                return handle.AssetObject as T;
+        }
 
-        if (handle?.AssetObject != null)
-        {
-            return handle.AssetObject as T;
-        }
-        else
-        {
-            return null;
-        }
+        return LoadEditorFallback<T>(filename);
     }
+
+#if UNITY_EDITOR
+    static T LoadEditorFallback<T>(string filename) where T : UnityEngine.Object
+    {
+        if (typeof(T) == typeof(TextAsset))
+        {
+            var csvPath = filename + ".csv";
+            var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>(csvPath);
+            if (asset)
+                return asset as T;
+        }
+
+        return null;
+    }
+#else
+    static T LoadEditorFallback<T>(string filename) where T : UnityEngine.Object
+    {
+        return null;
+    }
+#endif
 
     /// <summary>
     /// 加载所有资源

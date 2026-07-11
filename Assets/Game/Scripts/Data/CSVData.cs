@@ -6,15 +6,17 @@ using UnityEngine;
 
 public class CSVData : Singleton<CSVData>
 {
-    //µ¯´°
+    //ï¿½ï¿½ï¿½ï¿½
     public ConfigTable<Level> level = new ConfigTable<Level>();
     public bool Init()
     {
         level.Load("Level.csv");
+        EquipmentData.Instance.Init();
+        EquipmentItemData.Instance.Init();
         return true;
     }
 
-    #region ·Ö¸î·½·¨
+    #region ï¿½Ö¸î·½ï¿½ï¿½
     List<int> SplitInt(string input)
     {
         var retList = new List<int>();
