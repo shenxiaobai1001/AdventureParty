@@ -11,25 +11,30 @@ public class HeroEquipmentProfile : ScriptableObject
     [Header("1 - Head (HelmetAttachment;HeadCovering)")]
     public string head;
 
-    [Header("2 - Body (Torso;ArmUpperRight;ArmUpperLeft)")]
+    [Header("2 - Body (ShoulderAttach;Torso;ArmUpperRight;ArmUpperLeft)")]
     public string body;
 
-    [Header("3 - Shoulder (ShoulderAttachRight;ShoulderAttachLeft)")]
+    [Header("Legacy shoulder field (merged into body at runtime)")]
     public string shoulder;
 
-    [Header("4 - Forearm (ArmLowerRight;ArmLowerLeft;HandRight;HandLeft; optional Hips)")]
+    [Header("3 - Forearm (ArmLowerRight;ArmLowerLeft;HandRight;HandLeft; optional Hips)")]
     public string forearm;
 
-    [Header("5 - Hips (Hips;HipsAttachment)")]
+    [Header("4 - Hips (Hips;HipsAttachment)")]
     public string hips;
 
-    [Header("6 - Leg (LegRight;LegLeft; optional KneeAttach)")]
+    [Header("5 - Leg (LegRight;LegLeft; optional KneeAttach)")]
     public string leg;
 
-    [Header("7 - Back (BackAttachment)")]
+    [Header("6 - Back (BackAttachment)")]
     public string back;
 
     public bool hideHairWhenHeadEquipped;
+
+    public string GetResolvedBody()
+    {
+        return EquipmentPartParser.MergeCombined(body, shoulder);
+    }
 
     [Header("8 - Main Hand (legacy, use HeroWeaponVisual on character)")]
     public GameObject mainHandPrefab;
@@ -40,8 +45,10 @@ public class HeroEquipmentProfile : ScriptableObject
     public void ApplyFromSlotGroups(System.Collections.Generic.Dictionary<SyntyEquipmentSlot, System.Collections.Generic.List<string>> groups)
     {
         head = JoinSlot(groups, SyntyEquipmentSlot.Head);
-        body = JoinSlot(groups, SyntyEquipmentSlot.Body);
-        shoulder = JoinSlot(groups, SyntyEquipmentSlot.Shoulder);
+        body = EquipmentPartParser.MergeCombined(
+            JoinSlot(groups, SyntyEquipmentSlot.Body),
+            JoinSlot(groups, SyntyEquipmentSlot.Shoulder));
+        shoulder = string.Empty;
         forearm = JoinSlot(groups, SyntyEquipmentSlot.Forearm);
         hips = JoinSlot(groups, SyntyEquipmentSlot.Hips);
         leg = JoinSlot(groups, SyntyEquipmentSlot.Leg);

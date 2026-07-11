@@ -9,15 +9,20 @@ public static class RoleInventoryTypes
     static readonly Dictionary<string, ItemType> GridItemTypes = new Dictionary<string, ItemType>
     {
         { "Helmet", ItemType.Head },
-        { "Shoulder", ItemType.Shoulder },
         { "Body", ItemType.Body },
         { "Hips", ItemType.Hips },
         { "Legs", ItemType.Leg },
         { "Forearm", ItemType.Forearm },
         { "Back", ItemType.BackSlot },
-        { "Weapon1", ItemType.WeaponPrimary },
-        { "Weapon2", ItemType.WeaponSecondary },
+        { "Weapon", ItemType.Weapon },
         { "NormalBack", ItemType.All },
+    };
+
+    static readonly HashSet<string> LegacyGridNames = new HashSet<string>
+    {
+        "Shoulder",
+        "Weapon1",
+        "Weapon2",
     };
 
     public static bool TryGetItemTypeForGrid(string gridName, out ItemType itemType)
@@ -43,6 +48,15 @@ public static class RoleInventoryTypes
         }
 
         grid.allowedItemTypes.Add(itemType);
+
+        if (grid.name == "Body")
+            grid.allowedItemTypes.Add(ItemType.Shoulder);
+
+        if (grid.name == "Weapon")
+        {
+            grid.allowedItemTypes.Add(ItemType.WeaponPrimary);
+            grid.allowedItemTypes.Add(ItemType.WeaponSecondary);
+        }
     }
 
     public static void ConfigureAllGrids(InventoryGrid[] grids)
@@ -56,6 +70,35 @@ public static class RoleInventoryTypes
 
     public static bool IsEquipmentGrid(string gridName)
     {
-        return gridName != "NormalBack" && GridItemTypes.ContainsKey(gridName);
+        return gridName != "NormalBack"
+            && gridName != "Weapon"
+            && GridItemTypes.ContainsKey(gridName);
+    }
+
+    public static bool IsWeaponGrid(string gridName)
+    {
+        return gridName == "Weapon";
+    }
+
+    public static string NormalizeGridId(string gridId)
+    {
+        if (string.IsNullOrEmpty(gridId))
+            return gridId;
+
+        switch (gridId)
+        {
+            case "Shoulder":
+                return "Body";
+            case "Weapon1":
+            case "Weapon2":
+                return "Weapon";
+            default:
+                return gridId;
+        }
+    }
+
+    public static bool IsLegacyGridId(string gridId)
+    {
+        return LegacyGridNames.Contains(gridId);
     }
 }

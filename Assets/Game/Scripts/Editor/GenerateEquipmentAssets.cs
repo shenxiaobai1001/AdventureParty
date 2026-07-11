@@ -16,7 +16,6 @@ public static class GenerateEquipmentAssets
     {
         SyntyEquipmentSlot.Head,
         SyntyEquipmentSlot.Body,
-        SyntyEquipmentSlot.Shoulder,
         SyntyEquipmentSlot.Forearm,
         SyntyEquipmentSlot.Hips,
         SyntyEquipmentSlot.Leg,
@@ -150,11 +149,10 @@ public static class GenerateEquipmentAssets
     {
         switch (slot)
         {
-            case SyntyEquipmentSlot.Body: return 5f;
+            case SyntyEquipmentSlot.Body: return 7f;
             case SyntyEquipmentSlot.Leg: return 4f;
             case SyntyEquipmentSlot.Hips: return 3f;
             case SyntyEquipmentSlot.Forearm: return 2f;
-            case SyntyEquipmentSlot.Shoulder: return 2f;
             case SyntyEquipmentSlot.Back: return 2f;
             case SyntyEquipmentSlot.Head: return 1.5f;
             default: return 1f;

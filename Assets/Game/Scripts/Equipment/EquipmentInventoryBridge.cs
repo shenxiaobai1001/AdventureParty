@@ -9,7 +9,7 @@ public static class EquipmentInventoryBridge
 {
     static readonly string[] EquipmentGridNames =
     {
-        "Helmet", "Body", "Shoulder", "Forearm", "Hips", "Legs", "Back",
+        "Helmet", "Body", "Forearm", "Hips", "Legs", "Back",
     };
 
     public static HeroEquipmentProfile BuildWornProfile(Inventory inventory)
@@ -62,7 +62,7 @@ public static class EquipmentInventoryBridge
         if (!pickup || !inventory)
             return false;
 
-        var itemData = pickup.ItemData;
+        var itemData = pickup.ItemData as SyntyEquipmentItemData;
         if (!itemData)
             return false;
 
@@ -124,11 +124,10 @@ public static class EquipmentInventoryBridge
         profile.setName = item.itemName;
         profile.hideHairWhenHeadEquipped = item.equipmentSlot == SyntyEquipmentSlot.Head;
 
-        switch (item.equipmentSlot)
+        switch (EquipmentSlotUtility.NormalizeSlot(item.equipmentSlot))
         {
             case SyntyEquipmentSlot.Head: profile.head = item.parts; break;
             case SyntyEquipmentSlot.Body: profile.body = item.parts; break;
-            case SyntyEquipmentSlot.Shoulder: profile.shoulder = item.parts; break;
             case SyntyEquipmentSlot.Forearm: profile.forearm = item.parts; break;
             case SyntyEquipmentSlot.Hips: profile.hips = item.parts; break;
             case SyntyEquipmentSlot.Leg: profile.leg = item.parts; break;

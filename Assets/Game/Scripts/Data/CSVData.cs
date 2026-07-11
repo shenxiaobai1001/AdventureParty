@@ -13,6 +13,7 @@ public class CSVData : Singleton<CSVData>
         level.Load("Level.csv");
         EquipmentData.Instance.Init();
         EquipmentItemData.Instance.Init();
+        WeaponItemData.Instance.Init();
         return true;
     }
 

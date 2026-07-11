@@ -14,11 +14,10 @@ public class IconRenderEntry
 
     public static string GetSlotLabel(SyntyEquipmentSlot slot)
     {
-        switch (slot)
+        switch (EquipmentSlotUtility.NormalizeSlot(slot))
         {
             case SyntyEquipmentSlot.Head: return "Head";
             case SyntyEquipmentSlot.Body: return "Body";
-            case SyntyEquipmentSlot.Shoulder: return "Shoulder";
             case SyntyEquipmentSlot.Forearm: return "Forearm";
             case SyntyEquipmentSlot.Hips: return "Hips";
             case SyntyEquipmentSlot.Leg: return "Leg";

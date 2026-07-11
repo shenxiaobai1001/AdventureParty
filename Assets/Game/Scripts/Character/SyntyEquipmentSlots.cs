@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// Seven non-weapon equipment slots for Synty modular hero parts.
+/// Six non-weapon equipment slots for Synty modular hero parts.
+/// Body includes shoulder attachments, torso, and upper arms.
 /// Multiple part names in one slot are stored semicolon-separated.
 /// </summary>
 public enum SyntyEquipmentSlot
 {
     Head = 1,
     Body = 2,
+    /// <summary>Legacy slot id kept for old item ids (setId*100+3). Parts belong to Body.</summary>
     Shoulder = 3,
     Forearm = 4,
     Hips = 5,
@@ -27,11 +29,10 @@ public static class SyntyEquipmentPartClassifier
 
         if (partName.StartsWith("Chr_Torso_")
             || partName.StartsWith("Chr_ArmUpperRight_")
-            || partName.StartsWith("Chr_ArmUpperLeft_"))
+            || partName.StartsWith("Chr_ArmUpperLeft_")
+            || partName.StartsWith("Chr_ShoulderAttachRight_")
+            || partName.StartsWith("Chr_ShoulderAttachLeft_"))
             return SyntyEquipmentSlot.Body;
-
-        if (partName.StartsWith("Chr_ShoulderAttachRight_") || partName.StartsWith("Chr_ShoulderAttachLeft_"))
-            return SyntyEquipmentSlot.Shoulder;
 
         if (partName.StartsWith("Chr_ArmLowerRight_")
             || partName.StartsWith("Chr_ArmLowerLeft_")
@@ -66,7 +67,12 @@ public static class SyntyEquipmentPartClassifier
 
     public static void SortPartsForSlot(SyntyEquipmentSlot slot, List<string> parts)
     {
-        parts.Sort((a, b) => GetPartOrder(slot, a).CompareTo(GetPartOrder(slot, b)));
+        parts.Sort((a, b) => GetPartOrder(NormalizeSlot(slot), a).CompareTo(GetPartOrder(NormalizeSlot(slot), b)));
+    }
+
+    public static SyntyEquipmentSlot NormalizeSlot(SyntyEquipmentSlot slot)
+    {
+        return slot == SyntyEquipmentSlot.Shoulder ? SyntyEquipmentSlot.Body : slot;
     }
 
     static int GetPartOrder(SyntyEquipmentSlot slot, string partName)
@@ -75,14 +81,11 @@ public static class SyntyEquipmentPartClassifier
         {
             case SyntyEquipmentSlot.Body:
                 if (partName.Contains("Torso_")) return 0;
-                if (partName.Contains("ArmUpperRight_")) return 1;
-                if (partName.Contains("ArmUpperLeft_")) return 2;
-                return 3;
-
-            case SyntyEquipmentSlot.Shoulder:
-                if (partName.Contains("ShoulderAttachRight_")) return 0;
-                if (partName.Contains("ShoulderAttachLeft_")) return 1;
-                return 2;
+                if (partName.Contains("ShoulderAttachRight_")) return 1;
+                if (partName.Contains("ShoulderAttachLeft_")) return 2;
+                if (partName.Contains("ArmUpperRight_")) return 3;
+                if (partName.Contains("ArmUpperLeft_")) return 4;
+                return 5;
 
             case SyntyEquipmentSlot.Forearm:
                 if (partName.Contains("ArmLowerRight_")) return 0;

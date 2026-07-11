@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f496489e41cd464895bf77d42dbdecf, type: 3}
+  m_Name: hero_sm_wep_shield_12
+  m_EditorClassIdentifier: 
+  itemName: Hero Shield 12
+  description: Hero Shield 12
+  price: 0
+  weight: 5
+  itemType: 1
+  size:
+    width: 4
+    height: 4
+  icon: {fileID: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  weaponItemId: 1019
+  pack: 0
+  category: 3
+  syntyPrefabPath: Assets/Synty/PolygonFantasyHeroCharacters/Prefabs/Weapons/SM_Wep_Shield_12.prefab
+  syntySourcePrefab: {fileID: 1397866801264990, guid: efc8189be0ff92644a084f84928d1cf9, type: 3}
+  worldPickupPrefab: {fileID: 4537723322171133535, guid: 0e9567d07c0f1aa46a10e4502dd9ed74, type: 3}
+  renderVertical: 1

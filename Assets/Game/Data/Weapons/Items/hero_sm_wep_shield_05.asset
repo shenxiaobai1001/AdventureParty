@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f496489e41cd464895bf77d42dbdecf, type: 3}
+  m_Name: hero_sm_wep_shield_05
+  m_EditorClassIdentifier: 
+  itemName: Hero Shield 05
+  description: Hero Shield 05
+  price: 0
+  weight: 5
+  itemType: 1
+  size:
+    width: 4
+    height: 4
+  icon: {fileID: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  weaponItemId: 1012
+  pack: 0
+  category: 3
+  syntyPrefabPath: Assets/Synty/PolygonFantasyHeroCharacters/Prefabs/Weapons/SM_Wep_Shield_05.prefab
+  syntySourcePrefab: {fileID: 1145072085480710, guid: 4c80e23b6d36a884b966dfdc9a2b74c3, type: 3}
+  worldPickupPrefab: {fileID: 5644924592522215738, guid: 3a1b9e15bab0f764baa32d11595cedf2, type: 3}
+  renderVertical: 1

@@ -127,7 +127,7 @@ public static class GenerateSyntyEquipmentData
 
             entry.head = JoinSlot(groups, SyntyEquipmentSlot.Head);
             entry.body = JoinSlot(groups, SyntyEquipmentSlot.Body);
-            entry.shoulder = JoinSlot(groups, SyntyEquipmentSlot.Shoulder);
+            entry.shoulder = string.Empty;
             entry.forearm = JoinSlot(groups, SyntyEquipmentSlot.Forearm);
             entry.hips = JoinSlot(groups, SyntyEquipmentSlot.Hips);
             entry.leg = JoinSlot(groups, SyntyEquipmentSlot.Leg);
@@ -179,7 +179,6 @@ public static class GenerateSyntyEquipmentData
         {
             { SyntyEquipmentSlot.Head, new List<string>() },
             { SyntyEquipmentSlot.Body, new List<string>() },
-            { SyntyEquipmentSlot.Shoulder, new List<string>() },
             { SyntyEquipmentSlot.Forearm, new List<string>() },
             { SyntyEquipmentSlot.Hips, new List<string>() },
             { SyntyEquipmentSlot.Leg, new List<string>() },
@@ -192,16 +191,15 @@ public static class GenerateSyntyEquipmentData
         var sb = new StringBuilder();
         sb.AppendLine("# Synty PolygonFantasyHeroCharacters - Equipment Part Catalog");
         sb.AppendLine("# Source: Characters_ModularParts_Static");
-        sb.AppendLine("# Format: 7 equipment slots (weapons excluded). Parts in one set use ; separator.");
+        sb.AppendLine("# Format: 6 equipment slots (body includes shoulders; weapons excluded). Parts in one set use ; separator.");
         sb.AppendLine();
 
         AppendSlotSection(sb, "1-Head (HelmetAttachment;HeadCovering)", grouped[SyntyEquipmentSlot.Head]);
-        AppendSlotSection(sb, "2-Body (Torso;ArmUpperRight;ArmUpperLeft)", grouped[SyntyEquipmentSlot.Body]);
-        AppendSlotSection(sb, "3-Shoulder (ShoulderAttachRight;ShoulderAttachLeft)", grouped[SyntyEquipmentSlot.Shoulder]);
-        AppendSlotSection(sb, "4-Forearm (ArmLowerRight;ArmLowerLeft;HandRight;HandLeft; optional Hips)", grouped[SyntyEquipmentSlot.Forearm]);
-        AppendSlotSection(sb, "5-Hips (Hips;HipsAttachment)", grouped[SyntyEquipmentSlot.Hips]);
-        AppendSlotSection(sb, "6-Leg (LegRight;LegLeft; optional KneeAttach)", grouped[SyntyEquipmentSlot.Leg]);
-        AppendSlotSection(sb, "7-Back (BackAttachment)", grouped[SyntyEquipmentSlot.Back]);
+        AppendSlotSection(sb, "2-Body (ShoulderAttach;Torso;ArmUpperRight;ArmUpperLeft)", grouped[SyntyEquipmentSlot.Body]);
+        AppendSlotSection(sb, "3-Forearm (ArmLowerRight;ArmLowerLeft;HandRight;HandLeft; optional Hips)", grouped[SyntyEquipmentSlot.Forearm]);
+        AppendSlotSection(sb, "4-Hips (Hips;HipsAttachment)", grouped[SyntyEquipmentSlot.Hips]);
+        AppendSlotSection(sb, "5-Leg (LegRight;LegLeft; optional KneeAttach)", grouped[SyntyEquipmentSlot.Leg]);
+        AppendSlotSection(sb, "6-Back (BackAttachment)", grouped[SyntyEquipmentSlot.Back]);
 
         File.WriteAllText(CatalogTextPath, sb.ToString(), new UTF8Encoding(false));
     }
@@ -218,7 +216,7 @@ public static class GenerateSyntyEquipmentData
     static void WriteSetsTsv(List<EquipmentSetEntry> sets)
     {
         var sb = new StringBuilder();
-        sb.AppendLine("setIndex\tsetName\tHead\tBody\tShoulder\tForearm\tHips\tLeg\tBack");
+        sb.AppendLine("setIndex\tsetName\tHead\tBody\tForearm\tHips\tLeg\tBack");
 
         foreach (var set in sets)
         {
@@ -226,7 +224,6 @@ public static class GenerateSyntyEquipmentData
                 .Append(set.setName).Append('\t')
                 .Append(set.head).Append('\t')
                 .Append(set.body).Append('\t')
-                .Append(set.shoulder).Append('\t')
                 .Append(set.forearm).Append('\t')
                 .Append(set.hips).Append('\t')
                 .Append(set.leg).Append('\t')
@@ -241,7 +238,7 @@ public static class GenerateSyntyEquipmentData
         EnsureFolder("Assets/Game/Resources_moved/Config");
 
         var sb = new StringBuilder();
-        sb.AppendLine("id,name,head,body,shoulder,forearm,hips,leg,back");
+        sb.AppendLine("id,name,head,body,forearm,hips,leg,back");
 
         foreach (var set in sets)
         {
@@ -249,7 +246,6 @@ public static class GenerateSyntyEquipmentData
                 .Append(set.setName).Append(',')
                 .Append(set.head).Append(',')
                 .Append(set.body).Append(',')
-                .Append(set.shoulder).Append(',')
                 .Append(set.forearm).Append(',')
                 .Append(set.hips).Append(',')
                 .Append(set.leg).Append(',')

@@ -49,7 +49,6 @@ public static class IconStudioSettings
         switch (slot)
         {
             case SyntyEquipmentSlot.Head: return new Vector2Int(3, 3);
-            case SyntyEquipmentSlot.Shoulder: return new Vector2Int(2, 2);
             case SyntyEquipmentSlot.Body: return new Vector2Int(4, 6);
             case SyntyEquipmentSlot.Forearm: return new Vector2Int(2, 3);
             case SyntyEquipmentSlot.Hips: return new Vector2Int(4, 5);

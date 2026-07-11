@@ -123,11 +123,10 @@ public class EquipmentSetRow : NamedData
 
     public string GetSlotCombined(SyntyEquipmentSlot slot)
     {
-        switch (slot)
+        switch (EquipmentSlotUtility.NormalizeSlot(slot))
         {
             case SyntyEquipmentSlot.Head: return head ?? string.Empty;
-            case SyntyEquipmentSlot.Body: return body ?? string.Empty;
-            case SyntyEquipmentSlot.Shoulder: return shoulder ?? string.Empty;
+            case SyntyEquipmentSlot.Body: return EquipmentPartParser.MergeCombined(body, shoulder);
             case SyntyEquipmentSlot.Forearm: return forearm ?? string.Empty;
             case SyntyEquipmentSlot.Hips: return hips ?? string.Empty;
             case SyntyEquipmentSlot.Leg: return leg ?? string.Empty;
@@ -160,8 +159,8 @@ public class EquipmentSetRow : NamedData
         profile.setIndex = id;
         profile.setName = name;
         profile.head = head;
-        profile.body = body;
-        profile.shoulder = shoulder;
+        profile.body = EquipmentPartParser.MergeCombined(body, shoulder);
+        profile.shoulder = string.Empty;
         profile.forearm = forearm;
         profile.hips = hips;
         profile.leg = leg;

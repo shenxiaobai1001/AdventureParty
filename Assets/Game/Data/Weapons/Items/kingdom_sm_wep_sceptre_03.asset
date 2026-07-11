@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f496489e41cd464895bf77d42dbdecf, type: 3}
+  m_Name: kingdom_sm_wep_sceptre_03
+  m_EditorClassIdentifier: 
+  itemName: Kingdom Sceptre 03
+  description: Kingdom Sceptre 03
+  price: 0
+  weight: 6
+  itemType: 1
+  size:
+    width: 10
+    height: 2
+  icon: {fileID: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  weaponItemId: 2047
+  pack: 1
+  category: 5
+  syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Sceptre_03.prefab
+  syntySourcePrefab: {fileID: 1550625143155690, guid: f73be7b10fc184c439fd7018eccb210a, type: 3}
+  worldPickupPrefab: {fileID: 6859898386953197162, guid: c52aa017842536948ad55a65413bec43, type: 3}
+  renderVertical: 0

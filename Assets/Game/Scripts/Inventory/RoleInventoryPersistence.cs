@@ -47,7 +47,8 @@ public static class RoleInventoryPersistence
             if (!record.itemData || string.IsNullOrEmpty(record.gridId))
                 continue;
 
-            var grid = inventory.FindGridByName(record.gridId);
+            var gridId = RoleInventoryTypes.NormalizeGridId(record.gridId);
+            var grid = inventory.FindGridByName(gridId);
             if (!grid)
                 continue;
 

@@ -3,7 +3,7 @@ using UInventoryGrid;
 using UnityEngine;
 
 /// <summary>
-/// Picks up world equipment via overlap with each pickup's 2x trigger volume, or manual key press.
+/// Picks up world equipment and weapons via overlap with pickup trigger volumes, or manual key press.
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
 public class EquipmentPickupInteractor : MonoBehaviour
@@ -15,8 +15,8 @@ public class EquipmentPickupInteractor : MonoBehaviour
 
     CharacterController characterController;
     Animator animator;
-    readonly HashSet<EquipmentWorldPickup> pickupsInRange = new HashSet<EquipmentWorldPickup>();
-    readonly HashSet<EquipmentWorldPickup> previousPickupsInRange = new HashSet<EquipmentWorldPickup>();
+    readonly HashSet<IWorldItemPickup> pickupsInRange = new HashSet<IWorldItemPickup>();
+    readonly HashSet<IWorldItemPickup> previousPickupsInRange = new HashSet<IWorldItemPickup>();
 
     void Awake()
     {
@@ -33,7 +33,7 @@ public class EquipmentPickupInteractor : MonoBehaviour
 
         foreach (var pickup in pickupsInRange)
         {
-            if (!pickup || !pickup.isActiveAndEnabled)
+            if (pickup == null || pickup is not MonoBehaviour behaviour || !behaviour.isActiveAndEnabled)
                 continue;
 
             if (previousPickupsInRange.Contains(pickup))
@@ -47,13 +47,10 @@ public class EquipmentPickupInteractor : MonoBehaviour
             previousPickupsInRange.Add(pickup);
     }
 
-    /// <summary>
-    /// Picks up the nearest in-range pickup. Called from PlayerController when R is pressed.
-    /// </summary>
     public bool TryManualPickupNearest()
     {
         var pickup = FindNearestInRangePickup();
-        if (!pickup)
+        if (pickup == null)
             return false;
 
         return TryPickup(pickup);
@@ -65,20 +62,19 @@ public class EquipmentPickupInteractor : MonoBehaviour
         return pickupsInRange.Count > 0;
     }
 
-    public bool TryPickup(EquipmentWorldPickup pickup)
+    public bool TryPickup(IWorldItemPickup pickup)
     {
         var inventory = ResolveInventory();
-        if (!inventory || !pickup)
+        if (!inventory || pickup == null)
             return false;
 
-        var entry = ResolveCharacterEntry();
-        if (EquipmentInventoryBridge.TryPickup(pickup, inventory, entry))
+        if (pickup.TryPickup(inventory))
         {
             PlayPickupAnimation();
             return true;
         }
 
-        Debug.LogWarning($"[EquipmentPickup] Failed to pick up: {pickup.ItemData?.itemName ?? pickup.name}");
+        Debug.LogWarning($"[Pickup] Failed to pick up: {pickup.ItemData?.itemName ?? "Unknown"}");
         return false;
     }
 
@@ -87,9 +83,9 @@ public class EquipmentPickupInteractor : MonoBehaviour
         pickupsInRange.Clear();
         var probe = GetProbePosition();
 
-        foreach (var pickup in FindObjectsByType<EquipmentWorldPickup>(FindObjectsSortMode.None))
+        foreach (var pickup in FindAllPickups())
         {
-            if (!pickup || !pickup.isActiveAndEnabled)
+            if (pickup == null || pickup is not MonoBehaviour behaviour || !behaviour.isActiveAndEnabled)
                 continue;
 
             if (pickup.ContainsProbePoint(probe, pickupRadius))
@@ -97,10 +93,19 @@ public class EquipmentPickupInteractor : MonoBehaviour
         }
     }
 
-    EquipmentWorldPickup FindNearestInRangePickup()
+    static IEnumerable<IWorldItemPickup> FindAllPickups()
+    {
+        foreach (var pickup in Object.FindObjectsByType<EquipmentWorldPickup>(FindObjectsSortMode.None))
+            yield return pickup;
+
+        foreach (var pickup in Object.FindObjectsByType<WeaponWorldPickup>(FindObjectsSortMode.None))
+            yield return pickup;
+    }
+
+    IWorldItemPickup FindNearestInRangePickup()
     {
         RefreshPickupsInRange();
-        EquipmentWorldPickup nearest = null;
+        IWorldItemPickup nearest = null;
         var nearestDistance = float.MaxValue;
         var probe = GetProbePosition();
 
@@ -127,7 +132,7 @@ public class EquipmentPickupInteractor : MonoBehaviour
 
     CharacterEntry ResolveCharacterEntry()
     {
-        var mainPanel = FindFirstObjectByType<UIMainControlPanel>();
+        var mainPanel = Object.FindFirstObjectByType<UIMainControlPanel>();
         return mainPanel ? mainPanel.GetSelectedCharacterEntry() : null;
     }
 
@@ -136,7 +141,7 @@ public class EquipmentPickupInteractor : MonoBehaviour
         if (targetInventory)
             return targetInventory;
 
-        var mainPanel = FindFirstObjectByType<UIMainControlPanel>();
+        var mainPanel = Object.FindFirstObjectByType<UIMainControlPanel>();
         if (mainPanel)
         {
             var inventory = mainPanel.EnsureRoleInventory();
@@ -144,7 +149,7 @@ public class EquipmentPickupInteractor : MonoBehaviour
                 return inventory;
         }
 
-        var panel = FindFirstObjectByType<UIRolePanelController>(FindObjectsInactive.Include);
+        var panel = Object.FindFirstObjectByType<UIRolePanelController>(FindObjectsInactive.Include);
         return panel ? panel.GetComponent<Inventory>() : null;
     }
 

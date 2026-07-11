@@ -709,7 +709,9 @@ namespace UInventoryGrid
                    item.data.itemType == ItemType.Forearm ||
                    item.data.itemType == ItemType.Hips ||
                    item.data.itemType == ItemType.Leg ||
-                   item.data.itemType == ItemType.BackSlot;
+                   item.data.itemType == ItemType.BackSlot ||
+                   item.data.itemType == ItemType.WeaponPrimary ||
+                   item.data.itemType == ItemType.WeaponSecondary;
         }
 
         /// <summary>

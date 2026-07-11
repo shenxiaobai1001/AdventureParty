@@ -7,10 +7,10 @@ public class SyntyEquipmentPartCatalog : ScriptableObject
     [Header("1 - Head")]
     public string[] headParts = System.Array.Empty<string>();
 
-    [Header("2 - Body")]
+    [Header("2 - Body (includes shoulder attachments)")]
     public string[] bodyParts = System.Array.Empty<string>();
 
-    [Header("3 - Shoulder")]
+    [Header("Legacy shoulder list (merged into body at runtime)")]
     public string[] shoulderParts = System.Array.Empty<string>();
 
     [Header("4 - Forearm")]
@@ -27,11 +27,10 @@ public class SyntyEquipmentPartCatalog : ScriptableObject
 
     public string[] GetParts(SyntyEquipmentSlot slot)
     {
-        switch (slot)
+        switch (EquipmentSlotUtility.NormalizeSlot(slot))
         {
             case SyntyEquipmentSlot.Head: return headParts;
-            case SyntyEquipmentSlot.Body: return bodyParts;
-            case SyntyEquipmentSlot.Shoulder: return shoulderParts;
+            case SyntyEquipmentSlot.Body: return MergePartArrays(bodyParts, shoulderParts);
             case SyntyEquipmentSlot.Forearm: return forearmParts;
             case SyntyEquipmentSlot.Hips: return hipsParts;
             case SyntyEquipmentSlot.Leg: return legParts;
@@ -40,13 +39,36 @@ public class SyntyEquipmentPartCatalog : ScriptableObject
         }
     }
 
+    static string[] MergePartArrays(string[] primary, string[] secondary)
+    {
+        var merged = new List<string>();
+        if (primary != null)
+        {
+            foreach (var part in primary)
+            {
+                if (!string.IsNullOrWhiteSpace(part) && !merged.Contains(part))
+                    merged.Add(part);
+            }
+        }
+
+        if (secondary != null)
+        {
+            foreach (var part in secondary)
+            {
+                if (!string.IsNullOrWhiteSpace(part) && !merged.Contains(part))
+                    merged.Add(part);
+            }
+        }
+
+        return merged.ToArray();
+    }
+
     public void SetParts(SyntyEquipmentSlot slot, string[] parts)
     {
-        switch (slot)
+        switch (EquipmentSlotUtility.NormalizeSlot(slot))
         {
             case SyntyEquipmentSlot.Head: headParts = parts; break;
             case SyntyEquipmentSlot.Body: bodyParts = parts; break;
-            case SyntyEquipmentSlot.Shoulder: shoulderParts = parts; break;
             case SyntyEquipmentSlot.Forearm: forearmParts = parts; break;
             case SyntyEquipmentSlot.Hips: hipsParts = parts; break;
             case SyntyEquipmentSlot.Leg: legParts = parts; break;

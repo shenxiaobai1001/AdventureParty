@@ -6,7 +6,6 @@ public static class IconRenderCatalog
     {
         SyntyEquipmentSlot.Head,
         SyntyEquipmentSlot.Body,
-        SyntyEquipmentSlot.Shoulder,
         SyntyEquipmentSlot.Forearm,
         SyntyEquipmentSlot.Hips,
         SyntyEquipmentSlot.Leg,

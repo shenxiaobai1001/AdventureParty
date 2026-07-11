@@ -18,9 +18,6 @@ public static class IconStudioLayout
 
         switch (slot)
         {
-            case SyntyEquipmentSlot.Shoulder:
-                LayoutPairHorizontal(parts, "Right", "Left", ShoulderMeshGap);
-                break;
             case SyntyEquipmentSlot.Forearm:
                 LayoutForearm(parts);
                 break;
@@ -53,6 +50,8 @@ public static class IconStudioLayout
     static void LayoutBody(IList<GameObject> parts)
     {
         GameObject torso = null;
+        GameObject shoulderRight = null;
+        GameObject shoulderLeft = null;
         GameObject armRight = null;
         GameObject armLeft = null;
 
@@ -64,6 +63,10 @@ public static class IconStudioLayout
             var name = part.name;
             if (name.Contains("Torso_"))
                 torso = part;
+            else if (name.Contains("ShoulderAttachRight_"))
+                shoulderRight = part;
+            else if (name.Contains("ShoulderAttachLeft_"))
+                shoulderLeft = part;
             else if (name.Contains("ArmUpperRight_"))
                 armRight = part;
             else if (name.Contains("ArmUpperLeft_"))
@@ -76,16 +79,56 @@ public static class IconStudioLayout
             torso.transform.localRotation = Quaternion.identity;
         }
 
+        LayoutBodyShoulders(shoulderRight, shoulderLeft, torso);
         PlaceBodyArm(armRight, torso, isRight: true);
         PlaceBodyArm(armLeft, torso, isRight: false);
 
         foreach (var part in parts)
         {
-            if (!part || part == torso || part == armRight || part == armLeft)
+            if (!part || part == torso || part == shoulderRight || part == shoulderLeft
+                || part == armRight || part == armLeft)
                 continue;
 
             part.transform.localPosition = Vector3.zero;
             part.transform.localRotation = Quaternion.identity;
+        }
+    }
+
+    static void LayoutBodyShoulders(GameObject shoulderRight, GameObject shoulderLeft, GameObject torso)
+    {
+        if (!shoulderRight && !shoulderLeft)
+            return;
+
+        if (!torso)
+        {
+            LayoutPairHorizontal(new[] { shoulderRight, shoulderLeft }, "Right", "Left", ShoulderMeshGap);
+            return;
+        }
+
+        ResetLocalTransform(shoulderRight);
+        ResetLocalTransform(shoulderLeft);
+
+        GetLocalBounds(torso, out var torsoMin, out var torsoMax);
+        var shoulderY = Mathf.Lerp(torsoMin.y, torsoMax.y, 0.78f);
+        var shoulderZ = torsoMax.z + 0.02f;
+        var gapHalf = ShoulderMeshGap * 0.5f;
+
+        if (shoulderRight)
+        {
+            GetLocalBounds(shoulderRight, out var min, out _);
+            var attachWorld = torso.transform.TransformPoint(new Vector3(torsoMax.x + gapHalf, shoulderY, shoulderZ));
+            var pivotWorld = shoulderRight.transform.TransformPoint(new Vector3(min.x, min.y, min.z));
+            shoulderRight.transform.position += attachWorld - pivotWorld;
+            shoulderRight.transform.localRotation = Quaternion.identity;
+        }
+
+        if (shoulderLeft)
+        {
+            GetLocalBounds(shoulderLeft, out _, out var max);
+            var attachWorld = torso.transform.TransformPoint(new Vector3(torsoMin.x - gapHalf, shoulderY, shoulderZ));
+            var pivotWorld = shoulderLeft.transform.TransformPoint(new Vector3(max.x, max.y, max.z));
+            shoulderLeft.transform.position += attachWorld - pivotWorld;
+            shoulderLeft.transform.localRotation = Quaternion.identity;
         }
     }
 

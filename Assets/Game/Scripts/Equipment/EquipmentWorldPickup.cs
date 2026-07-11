@@ -4,12 +4,12 @@ using UnityEngine;
 /// <summary>
 /// World pickup for a single Synty equipment item. Visual pose matches Icon Studio output.
 /// </summary>
-public class EquipmentWorldPickup : MonoBehaviour
+public class EquipmentWorldPickup : MonoBehaviour, IWorldItemPickup
 {
     [SerializeField] SyntyEquipmentItemData itemData;
     [SerializeField] int equipmentItemId;
 
-    public SyntyEquipmentItemData ItemData => itemData;
+    public ItemData ItemData => itemData;
 
     void Awake()
     {
@@ -75,7 +75,14 @@ public class EquipmentWorldPickup : MonoBehaviour
 
     public bool TryPickup(Inventory inventory)
     {
-        return EquipmentInventoryBridge.TryPickup(this, inventory);
+        var entry = ResolveCharacterEntry();
+        return EquipmentInventoryBridge.TryPickup(this, inventory, entry);
+    }
+
+    CharacterEntry ResolveCharacterEntry()
+    {
+        var mainPanel = FindFirstObjectByType<UIMainControlPanel>();
+        return mainPanel ? mainPanel.GetSelectedCharacterEntry() : null;
     }
 
 #if UNITY_EDITOR

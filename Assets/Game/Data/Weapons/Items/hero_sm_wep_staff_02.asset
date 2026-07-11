@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f496489e41cd464895bf77d42dbdecf, type: 3}
+  m_Name: hero_sm_wep_staff_02
+  m_EditorClassIdentifier: 
+  itemName: Hero Staff 02
+  description: Hero Staff 02
+  price: 0
+  weight: 6
+  itemType: 1
+  size:
+    width: 10
+    height: 2
+  icon: {fileID: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  normalIconColor: {r: 1, g: 1, b: 1, a: 1}
+  hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
+  stackable: 0
+  maxStack: 1
+  searchTime: 5
+  weaponItemId: 1046
+  pack: 0
+  category: 5
+  syntyPrefabPath: Assets/Synty/PolygonFantasyHeroCharacters/Prefabs/Weapons/SM_Wep_Staff_02.prefab
+  syntySourcePrefab: {fileID: 1069959841205446, guid: d9197eec8ecc7714cbb8825a1467ae11, type: 3}
+  worldPickupPrefab: {fileID: 186207862439649771, guid: 62c9ce071a68f9c4a8f7ac1d761ede81, type: 3}
+  renderVertical: 0

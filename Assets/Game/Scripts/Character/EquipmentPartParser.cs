@@ -27,6 +27,27 @@ public static class EquipmentPartParser
         return string.Join(Separator.ToString(), list);
     }
 
+    public static string MergeCombined(string primary, string secondary)
+    {
+        var merged = new List<string>();
+        AppendUniqueParts(merged, Split(primary));
+        AppendUniqueParts(merged, Split(secondary));
+        return Join(merged);
+    }
+
+    static void AppendUniqueParts(List<string> target, string[] parts)
+    {
+        foreach (var part in parts)
+        {
+            if (string.IsNullOrWhiteSpace(part))
+                continue;
+
+            var trimmed = part.Trim();
+            if (!target.Contains(trimmed))
+                target.Add(trimmed);
+        }
+    }
+
     public static Dictionary<SyntyEquipmentSlot, List<string>> GroupBySlot(IEnumerable<string> partNames)
     {
         var groups = new Dictionary<SyntyEquipmentSlot, List<string>>();

@@ -90,8 +90,10 @@ public static class CreatePlayerHeroSetup
 
         asset.setName = "Leather Warrior";
         asset.setIndex = 1;
-        asset.body = "Chr_Torso_Male_06;Chr_ArmUpperRight_Male_02;Chr_ArmUpperLeft_Male_02";
-        asset.shoulder = "Chr_ShoulderAttachRight_04;Chr_ShoulderAttachLeft_04";
+        asset.body = EquipmentPartParser.MergeCombined(
+            "Chr_Torso_Male_06;Chr_ArmUpperRight_Male_02;Chr_ArmUpperLeft_Male_02",
+            "Chr_ShoulderAttachRight_04;Chr_ShoulderAttachLeft_04");
+        asset.shoulder = string.Empty;
         asset.forearm = "Chr_ArmLowerRight_Male_03;Chr_ArmLowerLeft_Male_03;Chr_HandRight_Male_02;Chr_HandLeft_Male_02";
         asset.hips = "Chr_Hips_Male_07";
         asset.leg = "Chr_LegRight_Male_03;Chr_LegLeft_Male_03";

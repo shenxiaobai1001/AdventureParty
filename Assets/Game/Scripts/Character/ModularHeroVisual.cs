@@ -102,11 +102,10 @@ public class ModularHeroVisual : MonoBehaviour
         ClearList(_allGender.headCoverings_No_FacialHair);
         ClearList(_allGender.headCoverings_No_Hair);
 
-        ApplySlotParts(equipment.body, appearance);
+        ApplySlotParts(equipment.GetResolvedBody(), appearance);
         ApplySlotParts(equipment.forearm, appearance);
         ApplySlotParts(equipment.hips, appearance);
         ApplySlotParts(equipment.leg, appearance);
-        ApplySlotParts(equipment.shoulder, appearance);
         ApplySlotParts(equipment.back, appearance);
 
         ApplyHeadEquipment(equipment, appearance);

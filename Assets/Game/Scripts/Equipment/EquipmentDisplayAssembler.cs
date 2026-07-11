@@ -232,11 +232,10 @@ public static class EquipmentDisplayAssembler
         profile.hideHairWhenHeadEquipped = request.slot == SyntyEquipmentSlot.Head;
 
         var joined = EquipmentPartParser.Join(request.parts);
-        switch (request.slot)
+        switch (EquipmentSlotUtility.NormalizeSlot(request.slot))
         {
             case SyntyEquipmentSlot.Head: profile.head = joined; break;
             case SyntyEquipmentSlot.Body: profile.body = joined; break;
-            case SyntyEquipmentSlot.Shoulder: profile.shoulder = joined; break;
             case SyntyEquipmentSlot.Forearm: profile.forearm = joined; break;
             case SyntyEquipmentSlot.Hips: profile.hips = joined; break;
             case SyntyEquipmentSlot.Leg: profile.leg = joined; break;
