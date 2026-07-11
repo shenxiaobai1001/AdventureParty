@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Preset_104 Body
   description: Preset_104 Body
   price: 0
-  weight: 5
+  weight: 7
   itemType: 28
   size:
     width: 4
@@ -30,5 +30,5 @@ MonoBehaviour:
   equipmentItemId: 10402
   setId: 104
   equipmentSlot: 2
-  parts: Chr_Torso_Female_14;Chr_ArmUpperRight_Female_08;Chr_ArmUpperLeft_Female_08
+  parts: Chr_Torso_Female_14;Chr_ArmUpperRight_Female_08;Chr_ArmUpperLeft_Female_08;Chr_ShoulderAttachRight_16
   worldPickupPrefab: {fileID: 890489938545167048, guid: 974da6d3353878047a197eb352449d38, type: 3}

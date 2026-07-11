@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Preset_67 Body
   description: Preset_67 Body
   price: 0
-  weight: 5
+  weight: 7
   itemType: 28
   size:
     width: 4
@@ -30,5 +30,5 @@ MonoBehaviour:
   equipmentItemId: 6702
   setId: 67
   equipmentSlot: 2
-  parts: Chr_Torso_Female_27;Chr_ArmUpperRight_Female_13;Chr_ArmUpperLeft_Female_13
+  parts: Chr_Torso_Female_27;Chr_ArmUpperRight_Female_13;Chr_ArmUpperLeft_Female_13;Chr_ShoulderAttachRight_17
   worldPickupPrefab: {fileID: 3633762887028041361, guid: 30bd1b3ebc0e714429b68ee90d4428f9, type: 3}

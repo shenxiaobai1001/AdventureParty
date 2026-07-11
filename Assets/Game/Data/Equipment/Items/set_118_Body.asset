@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Preset_118 Body
   description: Preset_118 Body
   price: 0
-  weight: 5
+  weight: 7
   itemType: 28
   size:
     width: 4
@@ -30,5 +30,5 @@ MonoBehaviour:
   equipmentItemId: 11802
   setId: 118
   equipmentSlot: 2
-  parts: Chr_Torso_Female_20;Chr_ArmUpperRight_Female_13;Chr_ArmUpperLeft_Female_04
+  parts: Chr_Torso_Female_20;Chr_ArmUpperRight_Female_13;Chr_ArmUpperLeft_Female_04;Chr_ShoulderAttachRight_08;Chr_ShoulderAttachLeft_18
   worldPickupPrefab: {fileID: 3008836596853953213, guid: 7157793f1a0ebbf40bd3653e9db7431a, type: 3}

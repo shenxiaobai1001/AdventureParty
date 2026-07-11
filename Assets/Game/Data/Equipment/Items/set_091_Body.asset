@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Preset_91 Body
   description: Preset_91 Body
   price: 0
-  weight: 5
+  weight: 7
   itemType: 28
   size:
     width: 4
@@ -30,5 +30,5 @@ MonoBehaviour:
   equipmentItemId: 9102
   setId: 91
   equipmentSlot: 2
-  parts: Chr_Torso_Female_01;Chr_ArmUpperRight_Female_01;Chr_ArmUpperLeft_Female_01
+  parts: Chr_Torso_Female_01;Chr_ArmUpperRight_Female_01;Chr_ArmUpperLeft_Female_01;Chr_ShoulderAttachRight_03;Chr_ShoulderAttachLeft_03
   worldPickupPrefab: {fileID: 2740021692953427479, guid: 64c20abb61a2fd1479fea6e6a7871c5c, type: 3}

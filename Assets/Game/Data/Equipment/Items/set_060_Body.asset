@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Preset_60 Body
   description: Preset_60 Body
   price: 0
-  weight: 5
+  weight: 7
   itemType: 28
   size:
     width: 4
@@ -30,5 +30,5 @@ MonoBehaviour:
   equipmentItemId: 6002
   setId: 60
   equipmentSlot: 2
-  parts: Chr_Torso_Male_16;Chr_ArmUpperRight_Male_18;Chr_ArmUpperLeft_Male_01
+  parts: Chr_Torso_Male_16;Chr_ArmUpperRight_Male_18;Chr_ArmUpperLeft_Male_01;Chr_ShoulderAttachRight_16;Chr_ShoulderAttachLeft_16
   worldPickupPrefab: {fileID: 5503748537749037780, guid: e3c70b5a0e700894cb7df9616564b064, type: 3}
