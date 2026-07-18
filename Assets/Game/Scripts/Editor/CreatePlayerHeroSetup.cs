@@ -38,7 +38,7 @@ public static class CreatePlayerHeroSetup
             $"- {EquipAAssetPath} (Cloth Base)\n" +
             $"- {EquipBAssetPath} (Leather Warrior)\n\n" +
             "Drag PlayerHero_Base into a scene and press Play.\n" +
-            "Assign weapons on HeroWeaponVisual (back mount prefabs or children under mount sockets).\n" +
+            "Equip weapons via the Weapon inventory grid; visuals spawn on Socket_WeaponMount_Back.\n" +
             "Menu: Game/Character/Ensure Weapon Mount Sockets On Selected\n" +
             "Use [1] to cycle equipment sets from EquipmentSets.csv.\n\n" +
             "Controls: LMB select, RMB move, E stance (standing), R walk/run (casual), MMB orbit, WASD pan, scroll zoom.\n" +
@@ -149,14 +149,6 @@ public static class CreatePlayerHeroSetup
         EnsurePlayerControlComponents(instance);
         EnsureWeaponMountSockets(instance);
 
-        var weaponVisual = instance.GetComponent<HeroWeaponVisual>();
-        if (weaponVisual)
-        {
-            var sword = AssetDatabase.LoadAssetAtPath<GameObject>(SwordPath);
-            if (sword && !weaponVisual.mainHand.weaponPrefab)
-                weaponVisual.mainHand.weaponPrefab = sword;
-        }
-
         var existing = AssetDatabase.LoadAssetAtPath<GameObject>(OutputPrefabPath);
         if (existing)
             PrefabUtility.SaveAsPrefabAsset(instance, OutputPrefabPath);
@@ -248,31 +240,35 @@ public static class CreatePlayerHeroSetup
         if (!handLeft)
             Debug.LogWarning("[CreatePlayerHeroSetup] Hand_L bone not found.", instance);
 
-        weaponVisual.mainHand.handSocket = EnsureHandMountSocket(
+        weaponVisual.mainHandSocket = EnsureHandMountSocket(
             instance.transform,
             handRight,
-            weaponVisual.mainHand.handSocket,
+            weaponVisual.mainHandSocket ?? weaponVisual.mainHand.handSocket,
             "Socket_WeaponHand_Main",
             weaponVisual.mainHandLocalPosition,
             weaponVisual.mainHandLocalEuler);
 
-        weaponVisual.offHand.handSocket = EnsureHandMountSocket(
+        weaponVisual.offHandSocket = EnsureHandMountSocket(
             instance.transform,
             handLeft,
-            weaponVisual.offHand.handSocket,
+            weaponVisual.offHandSocket ?? weaponVisual.offHand.handSocket,
             "Socket_WeaponHand_Off",
             weaponVisual.offHandLocalPosition,
             weaponVisual.offHandLocalEuler);
 
         if (backBone)
         {
-            weaponVisual.mainHand.backMountSocket = weaponVisual.mainHand.backMountSocket
-                ?? FindOrCreateSocket(backBone, "Socket_WeaponMount_Main",
-                    weaponVisual.mainBackLocalPosition, weaponVisual.mainBackLocalEuler);
-            weaponVisual.offHand.backMountSocket = weaponVisual.offHand.backMountSocket
-                ?? FindOrCreateSocket(backBone, "Socket_WeaponMount_Off",
-                    weaponVisual.offBackLocalPosition, weaponVisual.offBackLocalEuler);
+            weaponVisual.backMountSocket = weaponVisual.backMountSocket
+                ?? FindChildTransform(instance.transform, "Socket_WeaponMount_Back")
+                ?? FindChildTransform(instance.transform, "Socket_WeaponMount_Main")
+                ?? weaponVisual.mainHand.backMountSocket
+                ?? FindOrCreateSocket(backBone, "Socket_WeaponMount_Back",
+                    weaponVisual.backMountLocalPosition, weaponVisual.backMountLocalEuler);
         }
+
+        weaponVisual.mainHand.handSocket = weaponVisual.mainHandSocket;
+        weaponVisual.offHand.handSocket = weaponVisual.offHandSocket;
+        weaponVisual.mainHand.backMountSocket = weaponVisual.backMountSocket;
 
         EditorUtility.SetDirty(weaponVisual);
     }
@@ -334,6 +330,9 @@ public static class CreatePlayerHeroSetup
 
     public static void EnsurePlayerControlComponents(GameObject instance)
     {
+        if (!instance.GetComponent<EquipmentPickupInteractor>())
+            instance.AddComponent<EquipmentPickupInteractor>();
+
         if (!instance.GetComponent<PlayerController>())
             instance.AddComponent<PlayerController>();
 
@@ -342,6 +341,9 @@ public static class CreatePlayerHeroSetup
 
         if (!instance.GetComponent<HeroWeaponVisual>())
             instance.AddComponent<HeroWeaponVisual>();
+
+        if (!instance.GetComponent<HeroCombatProficiency>())
+            instance.AddComponent<HeroCombatProficiency>();
 
         var cc = instance.GetComponent<CharacterController>();
         if (!cc)

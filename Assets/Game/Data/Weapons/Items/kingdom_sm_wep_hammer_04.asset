@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 10
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7e99890dc6411344d91c6410f33dba45, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -29,8 +29,11 @@ MonoBehaviour:
   searchTime: 5
   weaponItemId: 2029
   pack: 1
-  category: 6
+  category: 8
+  proficiencyType: 1
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Hammer_04.prefab
   syntySourcePrefab: {fileID: 1943658915937524, guid: 3bff2d365f4e16843b4f7305d49075f5, type: 3}
   worldPickupPrefab: {fileID: 6009779173311433230, guid: 8be0de1316584dc4c98346a843de3d0a, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_hammer_04.png

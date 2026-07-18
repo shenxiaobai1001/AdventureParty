@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 4
     height: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: df39354c9cc36ba4fb8fa46b7f1b78a7, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 1044
   pack: 0
   category: 3
+  proficiencyType: 4
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyHeroCharacters/Prefabs/Weapons/SM_Wep_Shield_Long_16.prefab
   syntySourcePrefab: {fileID: 1176683891694784, guid: fd3dc9bb217448647b2117f11e73fc3f, type: 3}
   worldPickupPrefab: {fileID: 2043185551420963786, guid: 42c8893865fdd8649afcaf3d8ae61068, type: 3}
   renderVertical: 1
+  iconFileName: hero_sm_wep_shield_long_16.png

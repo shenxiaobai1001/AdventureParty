@@ -69,11 +69,89 @@ public static class GenerateWeaponAssets
             "OK");
     }
 
+    [MenuItem("Game/Weapon/3. Rebind Weapon Icons To ItemData")]
+    public static void RebindWeaponIconsToItemData()
+    {
+        if (!File.Exists(ItemsCsvPath))
+        {
+            EditorUtility.DisplayDialog("Weapon Icons", "WeaponItems.csv not found. Run step 1 first.", "OK");
+            return;
+        }
+
+        var rows = LoadItemRowsFromCsv();
+        var rebound = 0;
+        var missing = 0;
+
+        foreach (var row in rows)
+        {
+            var stem = Path.GetFileNameWithoutExtension(row.GetWorldPrefabAssetPath()).Replace("_World", string.Empty);
+            var assetPath = $"{ItemsFolder}/{stem}.asset";
+            var item = AssetDatabase.LoadAssetAtPath<SyntyWeaponItemData>(assetPath);
+            if (!item)
+                continue;
+
+            item.iconFileName = row.icon;
+            var iconPath = row.GetIconAssetPath();
+            var sprite = WeaponIconResolver.LoadSprite(iconPath);
+            if (sprite)
+            {
+                item.icon = sprite;
+                rebound++;
+            }
+            else
+            {
+                item.icon = null;
+                missing++;
+            }
+
+            EditorUtility.SetDirty(item);
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.DisplayDialog(
+            "Weapon Icons",
+            $"Rebound icons: {rebound}\nMissing PNG files: {missing}\n\nIf missing > 0, open WeaponIconStudio and press F6 first.",
+            "OK");
+    }
+
     [MenuItem("Game/Weapon/Generate All (CSV + Assets)")]
     public static void GenerateAll()
     {
         GenerateItemsCsvFromSynty();
         GenerateItemAssetsAndWorldPrefabs();
+    }
+
+    [MenuItem("Game/Weapon/4. Refresh ItemData From CSV")]
+    public static void RefreshItemDataFromCsv()
+    {
+        if (!File.Exists(ItemsCsvPath))
+        {
+            EditorUtility.DisplayDialog("Weapon Items", "WeaponItems.csv not found.", "OK");
+            return;
+        }
+
+        var rows = LoadItemRowsFromCsv();
+        EnsureFolder(ItemsFolder);
+
+        var updated = 0;
+        for (var i = 0; i < rows.Count; i++)
+        {
+            var row = rows[i];
+            EditorUtility.DisplayProgressBar("Refresh Weapon ItemData", row.name, i / (float)rows.Count);
+            if (CreateOrUpdateItemAsset(row))
+                updated++;
+        }
+
+        EditorUtility.ClearProgressBar();
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.DisplayDialog(
+            "Weapon Items",
+            $"Refreshed {updated} SyntyWeaponItemData assets from CSV.",
+            "OK");
     }
 
     public static List<WeaponItemRow> ScanWeaponRows()
@@ -110,6 +188,8 @@ public static class GenerateWeaponAssets
                 name = WeaponClassifier.GetDisplayName(prefabName, pack),
                 pack = pack.ToString(),
                 category = category.ToString(),
+                proficiencyType = WeaponClassifier.GetProficiencyType(category).ToString(),
+                proficiencyOverride = 0,
                 syntyPrefab = path,
                 icon = stem + ".png",
                 worldPrefab = $"{WorldFolder}/{stem}_World.prefab",
@@ -134,7 +214,7 @@ public static class GenerateWeaponAssets
     {
         EnsureFolder(Path.GetDirectoryName(ItemsCsvPath)?.Replace('\\', '/'));
         var builder = new StringBuilder();
-        builder.AppendLine("id,name,pack,category,syntyPrefab,icon,worldPrefab,gridW,gridH,itemType,weight,renderVertical");
+        builder.AppendLine("id,name,pack,category,proficiencyType,proficiencyOverride,syntyPrefab,icon,worldPrefab,gridW,gridH,itemType,weight,renderVertical");
 
         foreach (var row in rows)
         {
@@ -142,6 +222,8 @@ public static class GenerateWeaponAssets
                 .Append(EscapeCsv(row.name)).Append(',')
                 .Append(EscapeCsv(row.pack)).Append(',')
                 .Append(EscapeCsv(row.category)).Append(',')
+                .Append(EscapeCsv(row.proficiencyType)).Append(',')
+                .Append(row.proficiencyOverride).Append(',')
                 .Append(EscapeCsv(row.syntyPrefab)).Append(',')
                 .Append(EscapeCsv(row.icon)).Append(',')
                 .Append(EscapeCsv(row.worldPrefab)).Append(',')
@@ -178,9 +260,11 @@ public static class GenerateWeaponAssets
         item.syntySourcePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(row.GetSyntyPrefabAssetPath());
 
         var iconPath = row.GetIconAssetPath();
-        var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+        var sprite = WeaponIconResolver.LoadSprite(iconPath);
         if (sprite)
             item.icon = sprite;
+        else if (!string.IsNullOrEmpty(iconPath))
+            Debug.LogWarning($"[GenerateWeaponAssets] Missing weapon icon: {iconPath}");
 
         var worldPath = row.GetWorldPrefabAssetPath();
         var worldPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(worldPath);

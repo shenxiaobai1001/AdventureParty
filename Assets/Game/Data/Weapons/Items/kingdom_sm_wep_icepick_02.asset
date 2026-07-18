@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 6
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6a842c124001ddc489b9d8745dc24bfc, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 2033
   pack: 1
   category: 2
+  proficiencyType: 7
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_IcePick_02.prefab
   syntySourcePrefab: {fileID: 1928536560729590, guid: a0bde88e4f6d53249b99121677821072, type: 3}
   worldPickupPrefab: {fileID: 1210454839534489502, guid: 795c72e6ddcbf0040bf37defe3d4c4de, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_icepick_02.png

@@ -30,6 +30,8 @@ public static class WeaponIconStudioSettings
                 return FramePadding + 0.05f;
             case WeaponCategory.Polearm2H:
             case WeaponCategory.GreatSword2H:
+            case WeaponCategory.HeavyWeapon2H:
+            case WeaponCategory.FirearmRifle:
                 return FramePadding + 0.1f;
             default:
                 return FramePadding;

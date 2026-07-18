@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 4
     height: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c782e69008116224888e46f29643377b, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 2060
   pack: 1
   category: 3
+  proficiencyType: 4
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Shield_07.prefab
   syntySourcePrefab: {fileID: 1773075627887044, guid: 9e52f80f1ddc92442a34ef25a0262e48, type: 3}
   worldPickupPrefab: {fileID: 3088418913239628844, guid: e0b4e1f2e1f95744da439d106c2dfefe, type: 3}
   renderVertical: 1
+  iconFileName: kingdom_sm_wep_shield_07.png

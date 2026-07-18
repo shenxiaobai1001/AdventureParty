@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 6
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7992b1ed6eead4a40a065681614a0deb, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 2041
   pack: 1
   category: 1
+  proficiencyType: 6
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Mace_03.prefab
   syntySourcePrefab: {fileID: 1850651225127280, guid: d6c49010b560d8c4dbc68216b4d7fa25, type: 3}
   worldPickupPrefab: {fileID: 3412008066154713170, guid: cc8e0d8ddbd9cfd47aff30badac0d6bc, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_mace_03.png

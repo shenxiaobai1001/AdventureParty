@@ -12,7 +12,26 @@ public class WeaponWorldPickup : MonoBehaviour, IWorldItemPickup
 
     void Awake()
     {
-        AlignVisualToRoot();
+        EnsurePickupSetup();
+    }
+
+    void Start()
+    {
+        EnsurePickupSetup();
+    }
+
+    void EnsurePickupSetup()
+    {
+        var visualRoot = transform.Find("VisualRoot");
+        if (visualRoot)
+        {
+            AlignVisualToRoot();
+            return;
+        }
+
+        EquipmentVisualBounds.FitBoxColliderToVisual(gameObject, gameObject);
+        EquipmentVisualBounds.EnsurePickupTriggerCollider(gameObject, 2f);
+        EquipmentVisualBounds.EnsurePickupRigidbody(gameObject);
     }
 
     void AlignVisualToRoot()
@@ -50,14 +69,11 @@ public class WeaponWorldPickup : MonoBehaviour, IWorldItemPickup
 
     public bool ContainsProbePoint(Vector3 worldPoint, float fallbackRadius)
     {
-        var trigger = GetPickupTriggerCollider();
-        if (trigger)
-        {
-            var closest = trigger.ClosestPoint(worldPoint);
-            return (closest - worldPoint).sqrMagnitude < 0.05f;
-        }
-
-        return Vector3.Distance(worldPoint, transform.position) <= fallbackRadius;
+        return WorldPickupProbe.ContainsProbePoint(
+            GetPickupTriggerCollider(),
+            transform.position,
+            worldPoint,
+            fallbackRadius);
     }
 
     public void BindItemData(SyntyWeaponItemData data)

@@ -15,12 +15,12 @@ MonoBehaviour:
   itemName: Kingdom Axe 11
   description: Kingdom Axe 11
   price: 0
-  weight: 6
+  weight: 7
   itemType: 1
   size:
     width: 10
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7f868ddac9620364b8c8507b3d78d450, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -29,8 +29,11 @@ MonoBehaviour:
   searchTime: 5
   weaponItemId: 2011
   pack: 1
-  category: 5
+  category: 8
+  proficiencyType: 1
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Axe_11.prefab
   syntySourcePrefab: {fileID: 1278305851512556, guid: 5de4b1db53f2e654bab1e0448b16741e, type: 3}
   worldPickupPrefab: {fileID: 8721225942165488459, guid: 125ce3c3581988246b41eb4c6c39eec7, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_axe_11.png

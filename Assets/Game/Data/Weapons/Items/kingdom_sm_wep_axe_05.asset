@@ -15,12 +15,12 @@ MonoBehaviour:
   itemName: Kingdom Axe 05
   description: Kingdom Axe 05
   price: 0
-  weight: 6
+  weight: 7
   itemType: 1
   size:
     width: 10
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: a9b82d6c04645ec4a8e3aa9ee9dbc2fe, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -29,8 +29,11 @@ MonoBehaviour:
   searchTime: 5
   weaponItemId: 2005
   pack: 1
-  category: 5
+  category: 8
+  proficiencyType: 1
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Axe_05.prefab
   syntySourcePrefab: {fileID: 1300063168077220, guid: ba0c920c66150f14991eb3302717ea37, type: 3}
   worldPickupPrefab: {fileID: 3357056432815243288, guid: 28763eebd74274044bef1a2c8a012f16, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_axe_05.png

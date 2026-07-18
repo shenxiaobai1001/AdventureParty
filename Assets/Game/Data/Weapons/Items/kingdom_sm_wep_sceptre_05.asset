@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 10
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c61cb85a8bc6cb94c83d13ea09754ec1, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 2049
   pack: 1
   category: 5
+  proficiencyType: 2
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Sceptre_05.prefab
   syntySourcePrefab: {fileID: 1302504366941886, guid: 35350a69b5005d14a93eff4b360c1209, type: 3}
   worldPickupPrefab: {fileID: 5299304993614121545, guid: 203348aa44832914ebf8780cc6cdd66e, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_sceptre_05.png

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Inventory))]
 [RequireComponent(typeof(InventoryController))]
 [RequireComponent(typeof(EquipmentInventoryWatcher))]
+[RequireComponent(typeof(WeaponInventoryWatcher))]
 public class UIRolePanelController : MonoBehaviour
 {
     [Header("UI")]
@@ -19,6 +20,7 @@ public class UIRolePanelController : MonoBehaviour
     Inventory inventory;
     InventoryController inventoryController;
     EquipmentInventoryWatcher equipmentWatcher;
+    WeaponInventoryWatcher weaponWatcher;
     CharacterEntry boundEntry;
     bool isOpen;
 
@@ -29,6 +31,10 @@ public class UIRolePanelController : MonoBehaviour
         equipmentWatcher = GetComponent<EquipmentInventoryWatcher>();
         if (!equipmentWatcher)
             equipmentWatcher = gameObject.AddComponent<EquipmentInventoryWatcher>();
+
+        weaponWatcher = GetComponent<WeaponInventoryWatcher>();
+        if (!weaponWatcher)
+            weaponWatcher = gameObject.AddComponent<WeaponInventoryWatcher>();
 
         BindUiReferences();
         EnsureRoleNameLabel();
@@ -160,6 +166,7 @@ public class UIRolePanelController : MonoBehaviour
         RefreshHeader();
         RoleInventoryPersistence.Import(inventory, entry.inventory);
         equipmentWatcher?.RefreshBoundHero();
+        weaponWatcher?.RefreshBoundHero();
         RefreshWeightDisplay();
     }
 

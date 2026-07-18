@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 10
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2b07460c81d57af4cb0625d7cb6238eb, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 2071
   pack: 1
   category: 5
+  proficiencyType: 2
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Spear_08.prefab
   syntySourcePrefab: {fileID: 1064859834898084, guid: 779e5a6d75f5b1b4985da4860ddb05cf, type: 3}
   worldPickupPrefab: {fileID: 3422913934930203317, guid: 5a3d1cf0ee6fe2341949533446b30cca, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_spear_08.png

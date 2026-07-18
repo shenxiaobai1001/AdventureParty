@@ -24,11 +24,25 @@ public class PlayerHeroEntity : MonoBehaviour
 
         if (!weaponVisual)
             weaponVisual = GetComponent<HeroWeaponVisual>();
+
+        if (Application.isPlaying
+            && GetComponent<CharacterController>()
+            && !GetComponent<EquipmentPickupInteractor>())
+        {
+            gameObject.AddComponent<EquipmentPickupInteractor>();
+        }
     }
 
     void Start()
     {
         RefreshFull(activeEquipment ? activeEquipment : equipmentSetA);
+        EnsureCombatProficiencyComponent();
+    }
+
+    void EnsureCombatProficiencyComponent()
+    {
+        if (!GetComponent<HeroCombatProficiency>())
+            gameObject.AddComponent<HeroCombatProficiency>();
     }
 
     public void EquipSetA()

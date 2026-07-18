@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 6
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 08b54c41e99320b4880145b3b0226202, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 1002
   pack: 0
   category: 2
+  proficiencyType: 7
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyHeroCharacters/Prefabs/Weapons/SM_Wep_Dagger_01.prefab
   syntySourcePrefab: {fileID: 1264521192622078, guid: 577a666f9d6ed794893e6d29e09bc76b, type: 3}
   worldPickupPrefab: {fileID: 7692468249297924029, guid: 4c9cae217418ef04c99fba37d8b06225, type: 3}
   renderVertical: 0
+  iconFileName: hero_sm_wep_dagger_01.png

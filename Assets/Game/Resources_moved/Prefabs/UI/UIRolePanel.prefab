@@ -3819,7 +3819,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 545}
+  m_AnchoredPosition: {x: 0, y: 520}
   m_SizeDelta: {x: 300, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8896228803479553204
@@ -4557,6 +4557,7 @@ GameObject:
   - component: {fileID: 4459708658513587417}
   - component: {fileID: 7812345678901234567}
   - component: {fileID: 965754938857358119}
+  - component: {fileID: 1114240691520669038}
   m_Layer: 5
   m_Name: UIRolePanel
   m_TagString: Untagged
@@ -4662,6 +4663,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d221490383a35b24fa9bd714c7d0a2d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1114240691520669038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8795277341734399875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6066f4b43be5039448422ef4dd1dedc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &9061602123483386878

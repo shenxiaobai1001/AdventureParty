@@ -1,0 +1,11 @@
+id,name,attributeType,actionKey,baseXp,levelScale,notes
+1,负重活动,Strength,encumberedMove,6,1.0,负重状态下移动/劳动涨力量
+2,重负重活动,Strength,heavyEncumberedMove,10,1.0,接近负重上限时额外涨力量
+3,挨打,Toughness,hitTaken,8,1.0,被命中涨韧性
+4,伤后自愈,Toughness,naturalRecover,10,1.0,受伤后不治疗自然恢复中涨韧性
+5,轻装战斗,Agility,lightCombat,7,1.0,不负重或轻装下战斗
+6,轻武器作战,Agility,lightWeaponCombat,6,1.0,短刃/长剑等轻武器交战
+7,远程作战,Agility,rangedCombat,6,1.0,弓弩火药投掷作战同时涨灵巧
+8,暴击,Precision,crit,12,1.0,暴击累计涨精准
+9,远程命中,Precision,rangedHit,10,1.0,远程命中涨精准
+10,徒手作战,Agility,unarmedCombat,7,1.0,空手武术交战涨灵巧

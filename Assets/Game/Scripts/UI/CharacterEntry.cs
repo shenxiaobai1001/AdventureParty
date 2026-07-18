@@ -11,6 +11,7 @@ public class CharacterEntry
     public float hunger;
     public GameObject heroObject;
     public CharacterInventoryData inventory = new CharacterInventoryData();
+    public CombatProficiencyProfile combatProficiency = new CombatProficiencyProfile();
 
     public CharacterEntry Clone()
     {
@@ -22,7 +23,14 @@ public class CharacterEntry
             energy = energy,
             hunger = hunger,
             heroObject = heroObject,
-            inventory = inventory
+            inventory = inventory,
+            combatProficiency = combatProficiency != null ? combatProficiency.Clone() : new CombatProficiencyProfile(),
         };
+    }
+
+    public void EnsureCombatDefaults()
+    {
+        combatProficiency ??= new CombatProficiencyProfile();
+        combatProficiency.EnsureDefaults();
     }
 }

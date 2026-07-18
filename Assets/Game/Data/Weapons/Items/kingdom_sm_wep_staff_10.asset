@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 10
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3b7457ec39c7fb141b1078aaf37e122c, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 2085
   pack: 1
   category: 5
+  proficiencyType: 2
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Staff_10.prefab
   syntySourcePrefab: {fileID: 1291473490771272, guid: eee4a194e73e46f49b6854e0fc1c88b3, type: 3}
   worldPickupPrefab: {fileID: 3256378839188721917, guid: 32d60a8ea4240d942ba7dc7860f32082, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_staff_10.png

@@ -26,6 +26,10 @@ public class UIMainControlPanel : MonoBehaviour
     [SerializeField] UIRolePanelController rolePanel;
     [SerializeField] GameObject rolePanelPrefab;
 
+    [Header("State Panel")]
+    [SerializeField] UIStatePanel statePanel;
+    [SerializeField] GameObject statePanelPrefab;
+
     readonly List<CharacterEntry> roleList = new List<CharacterEntry>();
 
     KenshiCameraController cameraController;
@@ -356,7 +360,64 @@ public class UIMainControlPanel : MonoBehaviour
         panel.Open(roleList[selectedRoleIndex]);
     }
 
-    void OnStateButtonClicked() { }
+    void OnStateButtonClicked()
+    {
+        if (roleList.Count == 0)
+            return;
+
+        selectedRoleIndex = Mathf.Clamp(selectedRoleIndex, 0, roleList.Count - 1);
+
+        var panel = ResolveStatePanel();
+        if (!panel)
+        {
+            Debug.LogWarning("[UIMainControlPanel] UIStatePanel not found. Assign statePanel or statePanelPrefab.");
+            return;
+        }
+
+        panel.Open(roleList[selectedRoleIndex]);
+    }
+
+    UIStatePanel ResolveStatePanel()
+    {
+        if (statePanel)
+            return statePanel;
+
+        statePanel = FindFirstObjectByType<UIStatePanel>(FindObjectsInactive.Include);
+        if (statePanel)
+            return statePanel;
+
+        var existingRoot = FindSceneObjectByName("UIStatePanel");
+        if (existingRoot)
+        {
+            statePanel = existingRoot.GetComponent<UIStatePanel>();
+            if (!statePanel)
+                statePanel = existingRoot.AddComponent<UIStatePanel>();
+            return statePanel;
+        }
+
+        if (!statePanelPrefab)
+            return null;
+
+        var canvasTransform = GetComponentInParent<Canvas>()?.transform;
+        var instance = Instantiate(statePanelPrefab, canvasTransform ? canvasTransform : transform.root);
+        statePanel = instance.GetComponent<UIStatePanel>();
+        if (!statePanel)
+            statePanel = instance.AddComponent<UIStatePanel>();
+
+        return statePanel;
+    }
+
+    static GameObject FindSceneObjectByName(string objectName)
+    {
+        var transforms = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var t in transforms)
+        {
+            if (t && t.name == objectName)
+                return t.gameObject;
+        }
+
+        return null;
+    }
 
     void OnMapButtonClicked() { }
 
@@ -409,7 +470,7 @@ public class UIMainControlPanel : MonoBehaviour
             return;
 
         var heroObject = FindSceneHero();
-        roleList.Add(new CharacterEntry
+        var entry = new CharacterEntry
         {
             displayName = MainUiConst.DefaultRoleName,
             hp = MainUiConst.DefaultStatValue,
@@ -417,7 +478,9 @@ public class UIMainControlPanel : MonoBehaviour
             energy = MainUiConst.DefaultStatValue,
             hunger = MainUiConst.DefaultStatValue,
             heroObject = heroObject
-        });
+        };
+        entry.EnsureCombatDefaults();
+        roleList.Add(entry);
     }
 
     GameObject FindSceneHero()

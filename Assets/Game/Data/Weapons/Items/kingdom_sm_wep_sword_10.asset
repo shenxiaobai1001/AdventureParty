@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 6
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 41ae54f5c58486d498c5e24b84c88424, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 2095
   pack: 1
   category: 0
+  proficiencyType: 5
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Sword_10.prefab
   syntySourcePrefab: {fileID: 1442666837681596, guid: 2d9a0557564d9ec499844a9500116dd1, type: 3}
   worldPickupPrefab: {fileID: 2099566656537936479, guid: e83d416c3fe64954c8d1862700156108, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_sword_10.png

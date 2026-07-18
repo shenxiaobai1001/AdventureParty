@@ -9,6 +9,10 @@ public static class ItemVisualLayout
 {
     const float IconVisualScale = 2f;
 
+    const float WeaponHorizontalIconScale = 0.8f * 0.8f;
+    const float WeaponVerticalIconScale = 3f * 0.75f;
+    const float ShieldIconScale = 0.6f;
+
     const float HeadIconScaleMultiplier = 0.7f;
     const float HipsIconScaleMultiplier = 0.7f;
     const float LegIconScaleMultiplier = 0.8f;
@@ -45,16 +49,30 @@ public static class ItemVisualLayout
             return;
 
         var iconRect = item.icon.rectTransform;
-        item.icon.sprite = item.data.icon;
+        item.icon.sprite = ResolveItemIcon(item.data);
         item.icon.color = item.revealed ? item.data.normalIconColor : item.data.hiddenIconColor;
         item.icon.preserveAspect = true;
         iconRect.localScale = Vector3.one * GetIconScale(item);
         iconRect.localRotation = Quaternion.Euler(0f, 0f, item.isRotated ? -90f : 0f);
     }
 
+    static Sprite ResolveItemIcon(ItemData data)
+    {
+        if (!data)
+            return null;
+
+        if (data is SyntyWeaponItemData weaponData)
+            return weaponData.ResolveIcon();
+
+        return data.icon;
+    }
+
     static float GetIconScale(Item item)
     {
         var scale = IconVisualScale * GetSlotIconScaleMultiplier(item);
+
+        if (item.data is SyntyWeaponItemData weaponData)
+            return scale * GetWeaponIconScaleMultiplier(weaponData, item);
 
         if (!item.isRotated || item.data == null)
             return scale;
@@ -62,6 +80,19 @@ public static class ItemVisualLayout
         var width = Mathf.Max(1, item.data.size.width);
         var height = Mathf.Max(1, item.data.size.height);
         return scale * ((float)height / width);
+    }
+
+    static float GetWeaponIconScaleMultiplier(SyntyWeaponItemData weaponData, Item item)
+    {
+        if (!weaponData)
+            return 1f;
+
+        if (weaponData.category == WeaponCategory.Shield)
+            return ShieldIconScale;
+
+        var footprint = item.correctedSize;
+        var verticalInGrid = footprint.height > footprint.width;
+        return verticalInGrid ? WeaponVerticalIconScale : WeaponHorizontalIconScale;
     }
 
     static float GetSlotIconScaleMultiplier(Item item)

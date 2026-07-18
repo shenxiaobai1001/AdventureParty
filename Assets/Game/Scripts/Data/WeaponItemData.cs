@@ -36,6 +36,8 @@ public class WeaponItemRow : NamedData
 {
     public string pack;
     public string category;
+    public string proficiencyType;
+    public int proficiencyOverride;
     public string syntyPrefab;
     public string icon;
     public string worldPrefab;
@@ -55,6 +57,25 @@ public class WeaponItemRow : NamedData
         return System.Enum.TryParse(category, true, out WeaponCategory parsed)
             ? parsed
             : WeaponCategory.Misc1H;
+    }
+
+    public WeaponProficiencyType GetProficiencyType()
+    {
+        if (HasProficiencyOverride())
+        {
+            if (System.Enum.TryParse(proficiencyType, true, out WeaponProficiencyType overridden))
+                return overridden;
+
+            if (string.Equals(proficiencyType, "Dagger", System.StringComparison.OrdinalIgnoreCase))
+                return WeaponProficiencyType.MartialArts;
+        }
+
+        return WeaponClassifier.GetProficiencyType(GetCategory());
+    }
+
+    public bool HasProficiencyOverride()
+    {
+        return proficiencyOverride != 0;
     }
 
     public Vector2Int GetGridSize()

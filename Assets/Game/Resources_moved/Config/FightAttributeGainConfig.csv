@@ -1,0 +1,10 @@
+id,name,attributeType,actionKey,baseXp,levelScale,notes
+1,主动进攻,Offense,initiateAttack,8,1.0,主动起手进攻
+2,对攻交换,Offense,tradeHit,10,1.0,选择对攻且发生交换
+3,压制连击,Offense,pressure,9,1.0,连续压制命中
+4,成功格挡,Defense,block,10,1.0,格挡成功
+5,成功招架,Defense,parry,11,1.0,招架成功
+6,抗住连击,Defense,endureCombo,8,1.0,硬抗连击后仍站稳
+7,成功预判,Awareness,readThreat,10,1.0,察觉起手（决策层）
+8,成功闪避拉开,Awareness,evadeOrKite,12,1.0,选择闪避/拉开并成功（闪避不算独立战斗属性）
+9,反击窗口,Awareness,punishWhiff,11,1.0,对手收招窗口反击成功

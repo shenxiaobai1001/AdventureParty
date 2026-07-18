@@ -89,6 +89,9 @@ public class PlayerController : MonoBehaviour
 
         if (_animator && !_animator.GetComponent<RpgAnimatorEvents>())
             _animator.gameObject.AddComponent<RpgAnimatorEvents>();
+
+        if (!GetComponent<EquipmentPickupInteractor>())
+            gameObject.AddComponent<EquipmentPickupInteractor>();
     }
 
     void Start()

@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 10
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6e6cc5e1a983f1c459753c17076b2ac7, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 2012
   pack: 1
   category: 4
+  proficiencyType: 3
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Prop_Bow_01.prefab
   syntySourcePrefab: {fileID: 1836698891882270, guid: 999de633b0a5f0848b10c37d407a9d10, type: 3}
   worldPickupPrefab: {fileID: 772084560469066624, guid: a5ef1086c914ecc40b3770f0f192718d, type: 3}
   renderVertical: 1
+  iconFileName: kingdom_sm_prop_bow_01.png

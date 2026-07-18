@@ -51,14 +51,11 @@ public class EquipmentWorldPickup : MonoBehaviour, IWorldItemPickup
 
     public bool ContainsProbePoint(Vector3 worldPoint, float fallbackRadius)
     {
-        var trigger = GetPickupTriggerCollider();
-        if (trigger)
-        {
-            var closest = trigger.ClosestPoint(worldPoint);
-            return (closest - worldPoint).sqrMagnitude < 0.05f;
-        }
-
-        return Vector3.Distance(worldPoint, transform.position) <= fallbackRadius;
+        return WorldPickupProbe.ContainsProbePoint(
+            GetPickupTriggerCollider(),
+            transform.position,
+            worldPoint,
+            fallbackRadius);
     }
 
     public void BindItemData(SyntyEquipmentItemData data)

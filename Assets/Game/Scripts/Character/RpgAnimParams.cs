@@ -46,14 +46,65 @@ public static class RpgAnimParams
     /// <summary>AnimatorWeapon.TWOHANDSWORD</summary>
     public const int WeaponTwoHandSword = 1;
 
+    /// <summary>AnimatorWeapon.TWOHANDSPEAR</summary>
+    public const int WeaponTwoHandSpear = 2;
+
+    /// <summary>AnimatorWeapon.TWOHANDAXE</summary>
+    public const int WeaponTwoHandAxe = 3;
+
+    /// <summary>AnimatorWeapon.TWOHANDBOW</summary>
+    public const int WeaponTwoHandBow = 4;
+
+    /// <summary>AnimatorWeapon.RIFLE</summary>
+    public const int WeaponRifle = 18;
+
     /// <summary>Weapon.Relax</summary>
     public const int HandWeaponRelax = -1;
 
     /// <summary>Weapon.Unarmed</summary>
     public const int HandWeaponUnarmed = 0;
 
+    /// <summary>Weapon.Shield</summary>
+    public const int HandWeaponShield = 7;
+
+    /// <summary>Weapon.LeftSword</summary>
+    public const int HandWeaponLeftSword = 8;
+
     /// <summary>Weapon.RightSword</summary>
     public const int HandWeaponRightSword = 9;
+
+    /// <summary>Weapon.LeftMace</summary>
+    public const int HandWeaponLeftMace = 10;
+
+    /// <summary>Weapon.RightMace</summary>
+    public const int HandWeaponRightMace = 11;
+
+    /// <summary>Weapon.LeftDagger</summary>
+    public const int HandWeaponLeftDagger = 12;
+
+    /// <summary>Weapon.RightDagger</summary>
+    public const int HandWeaponRightDagger = 13;
+
+    /// <summary>Weapon.LeftPistol</summary>
+    public const int HandWeaponLeftPistol = 16;
+
+    /// <summary>Weapon.RightPistol</summary>
+    public const int HandWeaponRightPistol = 17;
+
+    /// <summary>Weapon.TwoHandSword</summary>
+    public const int HandWeaponTwoHandSword = 1;
+
+    /// <summary>Weapon.TwoHandSpear</summary>
+    public const int HandWeaponTwoHandSpear = 2;
+
+    /// <summary>Weapon.TwoHandAxe</summary>
+    public const int HandWeaponTwoHandAxe = 3;
+
+    /// <summary>Weapon.TwoHandBow</summary>
+    public const int HandWeaponTwoHandBow = 4;
+
+    /// <summary>Weapon.Rifle</summary>
+    public const int HandWeaponRifle = 18;
 
     /// <summary>AnimatorTrigger.WeaponSheathTrigger</summary>
     public const int TriggerWeaponSheath = 15;
@@ -87,7 +138,9 @@ public static class RpgAnimParams
 
     public const int SideNone = 0;
     public const int SideUnchanged = -1;
+    public const int SideLeft = 1;
     public const int SideRight = 2;
+    public const int SideDual = 3;
 
     /// <summary>Normalized forward walk speed for Velocity Z blend trees.</summary>
     public const float WalkBlendSpeed = 0.45f;
@@ -127,6 +180,14 @@ public static class RpgAnimParams
     {
         animator.SetInteger(TriggerNumber, triggerNumber);
         animator.SetTrigger(Trigger);
+    }
+
+    public static void FireInstantSwitch(Animator animator)
+    {
+        if (!animator)
+            return;
+
+        FireAnimatorTrigger(animator, TriggerInstantSwitch);
     }
 
     /// <summary>Matches RPG pack unsheath RightSword from Relax with back sheath.</summary>

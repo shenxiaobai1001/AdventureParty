@@ -20,7 +20,7 @@ MonoBehaviour:
   size:
     width: 10
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 073d859fdbe507f478ba879b31c628e3, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -30,7 +30,10 @@ MonoBehaviour:
   weaponItemId: 1003
   pack: 0
   category: 5
+  proficiencyType: 2
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyHeroCharacters/Prefabs/Weapons/SM_Wep_Joust_01.prefab
   syntySourcePrefab: {fileID: 1262751876476840, guid: 26e92553ace791e4fa0f935ee0cc84c2, type: 3}
   worldPickupPrefab: {fileID: 3719062029101750472, guid: 7aed96ea57aea7b45b377192703e3b2f, type: 3}
   renderVertical: 0
+  iconFileName: hero_sm_wep_joust_01.png

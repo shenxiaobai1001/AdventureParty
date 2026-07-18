@@ -18,9 +18,9 @@ MonoBehaviour:
   weight: 6
   itemType: 1
   size:
-    width: 10
+    width: 6
     height: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 21352871f48bc0e46aae6e929657140d, type: 3}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}
   normalIconColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenIconColor: {r: 0, g: 0, b: 0, a: 1}
@@ -29,8 +29,11 @@ MonoBehaviour:
   searchTime: 5
   weaponItemId: 2025
   pack: 1
-  category: 5
+  category: 10
+  proficiencyType: 8
+  proficiencyOverride: 0
   syntyPrefabPath: Assets/Synty/PolygonFantasyKingdom/Prefabs/Weapons/SM_Wep_Elephant_Gun_02.prefab
   syntySourcePrefab: {fileID: 1066877760236180, guid: 60e3fbb6578eae747aa8b5321474e75d, type: 3}
   worldPickupPrefab: {fileID: 4272643193367606620, guid: d8689c8e43ac254428e6eeb1e57694d6, type: 3}
   renderVertical: 0
+  iconFileName: kingdom_sm_wep_elephant_gun_02.png

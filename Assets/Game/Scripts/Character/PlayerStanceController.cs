@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Casual (Relax, sword on back) vs Combat (1H right sword) stance. Toggle with E while standing still.
+/// Casual (Relax) vs Combat stance driven by resolved weapon loadout. Toggle with E while standing still.
 /// </summary>
 public class PlayerStanceController : MonoBehaviour
 {
@@ -84,16 +84,14 @@ public class PlayerStanceController : MonoBehaviour
 
         _weaponVisual.RefreshWeaponDetection();
 
-        if (!_weaponVisual.HasMainWeapon)
+        if (!_weaponVisual.HasDrawableWeapon)
         {
-            LogDebug("Blocked: no main-hand weapon on back mount socket.");
+            LogDebug("Blocked: no drawable weapon equipped in the weapon grid.");
             return false;
         }
 
         if (!_animator)
-        {
             LogDebug("Warning: Animator missing, switching instantly without animation.");
-        }
 
         if (CurrentStance == StanceMode.Casual)
             BeginEnterCombat();
@@ -121,10 +119,11 @@ public class PlayerStanceController : MonoBehaviour
             _switchTimeoutRoutine = null;
         }
 
+        var loadout = _weaponVisual != null ? _weaponVisual.CurrentLoadout : ResolvedCombatLoadout.Empty;
         if (_targetStance == StanceMode.Combat)
-            RpgAnimParams.FinalizeCombatRightSword(_animator);
+            CombatAnimBinding.FinalizeCombat(_animator, loadout);
         else
-            RpgAnimParams.FinalizeRelaxAfterSheath(_animator);
+            CombatAnimBinding.FinalizeRelax(_animator);
 
         CurrentStance = _targetStance;
         IsSwitching = false;
@@ -145,9 +144,10 @@ public class PlayerStanceController : MonoBehaviour
         _player?.CancelMovement();
         _weaponVisual.RequestAttachOnSwitch(HeroWeaponVisual.AttachTarget.Hand);
 
+        var loadout = _weaponVisual.CurrentLoadout;
         if (_animator)
         {
-            RpgAnimParams.BeginUnsheathRightSwordFromRelax(_animator);
+            CombatAnimBinding.BeginUnsheathFromRelax(_animator, loadout);
             _switchTimeoutRoutine = StartCoroutine(SwitchTimeoutRoutine());
         }
         else
@@ -164,9 +164,10 @@ public class PlayerStanceController : MonoBehaviour
         _player?.CancelMovement();
         _weaponVisual.RequestAttachOnSwitch(HeroWeaponVisual.AttachTarget.BackMount);
 
+        var loadout = _weaponVisual.CurrentLoadout;
         if (_animator)
         {
-            RpgAnimParams.BeginSheathRightSwordToRelax(_animator);
+            CombatAnimBinding.BeginSheathToRelax(_animator, loadout);
             _switchTimeoutRoutine = StartCoroutine(SwitchTimeoutRoutine());
         }
         else

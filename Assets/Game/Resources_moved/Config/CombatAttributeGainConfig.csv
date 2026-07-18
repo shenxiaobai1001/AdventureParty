@@ -1,0 +1,5 @@
+id,name,attributeType,actionKey,baseXp,levelScale,notes
+1,负重活动,Strength,encumberedMove,6,1.0,兼容旧表名；正式表见 BodyAttributeGainConfig.csv
+2,挨打,Toughness,hitTaken,8,1.0,
+3,轻装战斗,Agility,lightCombat,7,1.0,
+4,暴击,Precision,crit,12,1.0,
