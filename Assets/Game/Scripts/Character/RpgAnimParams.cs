@@ -176,10 +176,103 @@ public static class RpgAnimParams
         animator.SetInteger(SheathLocation, SheathLocationBack);
     }
 
+    /// <summary>AnimatorTrigger.AttackTrigger</summary>
+    public const int TriggerAttack = 4;
+
+    /// <summary>AnimatorTrigger.AttackKickTrigger</summary>
+    public const int TriggerAttackKick = 5;
+
+    /// <summary>AnimatorTrigger.AttackDualTrigger</summary>
+    public const int TriggerAttackDual = 6;
+
+    /// <summary>AnimatorTrigger.SpecialAttackTrigger</summary>
+    public const int TriggerSpecialAttack = 8;
+
+    /// <summary>AnimatorTrigger.GetHitTrigger</summary>
+    public const int TriggerGetHit = 12;
+
+    /// <summary>AnimatorTrigger.RollTrigger</summary>
+    public const int TriggerRoll = 13;
+
+    /// <summary>AnimatorTrigger.DodgeTrigger</summary>
+    public const int TriggerDodge = 17;
+
+    /// <summary>AnimatorTrigger.BlockTrigger</summary>
+    public const int TriggerBlock = 19;
+
+    /// <summary>AnimatorTrigger.BlockBreakTrigger</summary>
+    public const int TriggerBlockBreak = 22;
+
+    /// <summary>AnimatorTrigger.ReloadTrigger</summary>
+    public const int TriggerReload = 24;
+
+    /// <summary>HitType.Forward1 / BlockedHitType.BlockedHit1</summary>
+    public const int HitForward1 = 1;
+
+    /// <summary>DodgeType.Left</summary>
+    public const int DodgeLeft = 1;
+
+    /// <summary>DodgeType.Right</summary>
+    public const int DodgeRight = 2;
+
+    /// <summary>DodgeType.Backward</summary>
+    public const int DodgeBack = 3;
+
+    /// <summary>RollType.Forward</summary>
+    public const int RollForward = 1;
+
+    /// <summary>RollType.Right</summary>
+    public const int RollRight = 2;
+
+    /// <summary>RollType.Backward</summary>
+    public const int RollBack = 3;
+
+    /// <summary>RollType.Left</summary>
+    public const int RollLeft = 4;
+
     static void FireAnimatorTrigger(Animator animator, int triggerNumber)
     {
         animator.SetInteger(TriggerNumber, triggerNumber);
         animator.SetTrigger(Trigger);
+    }
+
+    public static void FireActionTrigger(Animator animator, int triggerNumber, int actionNumber)
+    {
+        if (!animator)
+            return;
+
+        animator.SetInteger(Action, actionNumber);
+        FireAnimatorTrigger(animator, triggerNumber);
+    }
+
+    public static void StartBlock(Animator animator)
+    {
+        if (!animator)
+            return;
+
+        animator.SetBool(Blocking, true);
+        FireAnimatorTrigger(animator, TriggerBlock);
+    }
+
+    public static void EndBlock(Animator animator)
+    {
+        if (!animator)
+            return;
+
+        animator.SetBool(Blocking, false);
+    }
+
+    /// <summary>
+    /// Pack exposes <c>BlockBreakTrigger</c> (22) but no public controller wrapper — fire it directly.
+    /// Keep Blocking true so the controller can leave the block state via Break.
+    /// </summary>
+    public static void FireBlockBreak(Animator animator)
+    {
+        if (!animator)
+            return;
+
+        animator.SetBool(Blocking, true);
+        FireAnimatorTrigger(animator, TriggerBlockBreak);
     }
 
     public static void FireInstantSwitch(Animator animator)
@@ -213,6 +306,66 @@ public static class RpgAnimParams
         animator.SetInteger(WeaponSwitch, WeaponRelax);
         animator.SetInteger(Weapon, WeaponArmed);
         animator.SetInteger(RightWeapon, HandWeaponRightSword);
+        animator.SetInteger(Side, SideRight);
+        FireAnimatorTrigger(animator, TriggerWeaponSheath);
+    }
+
+    /// <summary>2Hand-Shooting-Unsheath-Back-Relax.</summary>
+    public static void BeginUnsheathRifleFromRelax(Animator animator)
+    {
+        if (!animator)
+            return;
+
+        SetSheathLocationBack(animator);
+        animator.SetInteger(WeaponSwitch, WeaponRifle);
+        animator.SetInteger(Weapon, WeaponRelax);
+        animator.SetInteger(LeftWeapon, HandWeaponUnarmed);
+        animator.SetInteger(RightWeapon, HandWeaponRifle);
+        animator.SetInteger(Side, SideNone);
+        FireAnimatorTrigger(animator, TriggerWeaponUnsheath);
+    }
+
+    /// <summary>2Hand-Shooting-Sheath-Back-Relax.</summary>
+    public static void BeginSheathRifleToRelax(Animator animator)
+    {
+        if (!animator)
+            return;
+
+        SetSheathLocationBack(animator);
+        animator.SetInteger(WeaponSwitch, WeaponRelax);
+        animator.SetInteger(Weapon, WeaponRifle);
+        animator.SetInteger(LeftWeapon, HandWeaponUnarmed);
+        animator.SetInteger(RightWeapon, HandWeaponRifle);
+        animator.SetInteger(Side, SideNone);
+        FireAnimatorTrigger(animator, TriggerWeaponSheath);
+    }
+
+    /// <summary>1H pistol unsheath from Relax (Armed + RightPistol).</summary>
+    public static void BeginUnsheathRightPistolFromRelax(Animator animator)
+    {
+        if (!animator)
+            return;
+
+        SetSheathLocationBack(animator);
+        animator.SetInteger(WeaponSwitch, WeaponArmed);
+        animator.SetInteger(Weapon, WeaponRelax);
+        animator.SetInteger(LeftWeapon, HandWeaponUnarmed);
+        animator.SetInteger(RightWeapon, HandWeaponRightPistol);
+        animator.SetInteger(Side, SideRight);
+        FireAnimatorTrigger(animator, TriggerWeaponUnsheath);
+    }
+
+    /// <summary>1H pistol sheath back to Relax.</summary>
+    public static void BeginSheathRightPistolToRelax(Animator animator)
+    {
+        if (!animator)
+            return;
+
+        SetSheathLocationBack(animator);
+        animator.SetInteger(WeaponSwitch, WeaponRelax);
+        animator.SetInteger(Weapon, WeaponArmed);
+        animator.SetInteger(LeftWeapon, HandWeaponUnarmed);
+        animator.SetInteger(RightWeapon, HandWeaponRightPistol);
         animator.SetInteger(Side, SideRight);
         FireAnimatorTrigger(animator, TriggerWeaponSheath);
     }

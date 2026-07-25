@@ -39,7 +39,7 @@ public class WeaponProficiencyConfigData : Singleton<WeaponProficiencyConfigData
     }
 }
 
-/// <summary>体质属性配置（力量/韧性/灵巧/精准）。</summary>
+/// <summary>体质属性配置（力量/韧�?灵巧/精准）�?/summary>
 public class BodyAttributesConfigData : Singleton<BodyAttributesConfigData>
 {
     public ConfigTable<BodyAttributeConfigRow> rows = new ConfigTable<BodyAttributeConfigRow>();
@@ -82,7 +82,7 @@ public class BodyAttributesConfigData : Singleton<BodyAttributesConfigData>
     }
 }
 
-/// <summary>战斗属性配置（攻击/防御/感知）。</summary>
+/// <summary>战斗属性配置（攻击/防御/感知）�?/summary>
 public class FightAttributesConfigData : Singleton<FightAttributesConfigData>
 {
     public ConfigTable<FightAttributeConfigRow> rows = new ConfigTable<FightAttributeConfigRow>();
@@ -244,9 +244,9 @@ public class WeaponProficiencyConfigRow : NamedData
 
         // Legacy art line name from older CSV / saves.
         if (string.Equals(proficiencyType, "Dagger", System.StringComparison.OrdinalIgnoreCase))
-            return WeaponProficiencyType.MartialArts;
+            return WeaponProficiencyType.Sword;
 
-        return WeaponProficiencyType.Longsword;
+        return WeaponProficiencyType.Sword;
     }
 }
 
@@ -305,9 +305,9 @@ public class WeaponProficiencyGainRow : NamedData
             return parsed;
 
         if (string.Equals(proficiencyType, "Dagger", System.StringComparison.OrdinalIgnoreCase))
-            return WeaponProficiencyType.MartialArts;
+            return WeaponProficiencyType.Sword;
 
-        return WeaponProficiencyType.Longsword;
+        return WeaponProficiencyType.Sword;
     }
 }
 
@@ -363,9 +363,9 @@ public class WeaponProficiencyLevelEffectRow : NamedData
             return parsed;
 
         if (string.Equals(proficiencyType, "Dagger", System.StringComparison.OrdinalIgnoreCase))
-            return WeaponProficiencyType.MartialArts;
+            return WeaponProficiencyType.Sword;
 
-        return WeaponProficiencyType.Longsword;
+        return WeaponProficiencyType.Sword;
     }
 }
 

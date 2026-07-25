@@ -25,7 +25,80 @@ public static class ItemVisualLayout
         ApplySize(item);
         ApplyLayerOrder(item);
         ApplyIcon(item);
+        ApplyEquippedMarker(item);
         item.transform.SetAsLastSibling();
+    }
+
+    public static void RefreshEquippedMarkersInOpenInventories(HeroWeaponVisual visual)
+    {
+        foreach (var item in Object.FindObjectsByType<Item>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        {
+            if (item && item.data is SyntyWeaponItemData)
+                ApplyEquippedMarker(item, visual);
+        }
+    }
+
+    public static void ApplyEquippedMarker(Item item, HeroWeaponVisual visual = null)
+    {
+        if (!item)
+            return;
+
+        EnsureEquippedMarker(item);
+
+        if (!item.equippedMarker)
+            return;
+
+        var show = false;
+        if (item.data is SyntyWeaponItemData weapon)
+        {
+            if (!visual)
+                visual = ResolveHeroVisualForItem(item);
+
+            show = visual && WeaponEquipService.IsEquipped(visual, weapon);
+        }
+
+        item.equippedMarker.gameObject.SetActive(show);
+    }
+
+    static HeroWeaponVisual ResolveHeroVisualForItem(Item item)
+    {
+        var rolePanel = item.inventory ? item.inventory.GetComponent<UIRolePanelController>() : null;
+        if (!rolePanel)
+            rolePanel = Object.FindFirstObjectByType<UIRolePanelController>();
+
+        var hero = rolePanel ? rolePanel.ResolveBoundHero() : null;
+        return hero ? hero.weaponVisual : null;
+    }
+
+    static void EnsureEquippedMarker(Item item)
+    {
+        if (item.equippedMarker)
+            return;
+
+        var existing = item.transform.Find("EquippedMarker");
+        if (existing && existing.TryGetComponent<Image>(out var img))
+        {
+            item.equippedMarker = img;
+            return;
+        }
+
+        if (item.data is not SyntyWeaponItemData)
+            return;
+
+        var go = new GameObject("EquippedMarker", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        go.transform.SetParent(item.transform, false);
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(1f, 1f);
+        rt.anchorMax = new Vector2(1f, 1f);
+        rt.pivot = new Vector2(1f, 1f);
+        rt.anchoredPosition = new Vector2(-4f, -4f);
+        rt.sizeDelta = new Vector2(18f, 18f);
+
+        var image = go.GetComponent<Image>();
+        image.color = new Color(0.95f, 0.75f, 0.2f, 1f);
+        image.raycastTarget = false;
+        item.equippedMarker = image;
+        go.SetActive(false);
     }
 
     static void ApplySize(Item item)
@@ -145,6 +218,9 @@ public static class ItemVisualLayout
 
         if (item.icon)
             item.icon.transform.SetSiblingIndex(index++);
+
+        if (item.equippedMarker)
+            item.equippedMarker.transform.SetSiblingIndex(index++);
 
         if (item.stackCountText)
             item.stackCountText.transform.SetSiblingIndex(index++);

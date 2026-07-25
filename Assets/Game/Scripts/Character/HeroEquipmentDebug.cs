@@ -1,7 +1,8 @@
 using UnityEngine;
 
 /// <summary>
-/// Press [1] to cycle equipment sets from EquipmentSets.csv (Synty Preset_1..120).
+/// Press [F1] to cycle equipment sets from EquipmentSets.csv (Synty Preset_1..120).
+/// Alpha1 is reserved for combat light-attack debug (CombatMovePlayer).
 /// </summary>
 public class HeroEquipmentDebug : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class HeroEquipmentDebug : MonoBehaviour
     void Start()
     {
         if (!EquipmentData.Instance.EnsureLoaded())
-            Debug.LogWarning("[HeroEquipmentDebug] EquipmentSets.csv not loaded yet. Press [1] to retry.", this);
+            Debug.LogWarning("[HeroEquipmentDebug] EquipmentSets.csv not loaded yet. Press [F1] to retry.", this);
 
         if (hero && hero.activeEquipment)
             _currentSetIndex = hero.activeEquipment.setIndex;
@@ -26,7 +27,7 @@ public class HeroEquipmentDebug : MonoBehaviour
 
     void Update()
     {
-        if (!hero || !Input.GetKeyDown(KeyCode.Alpha1))
+        if (!hero || !Input.GetKeyDown(KeyCode.F1))
             return;
 
         if (!EquipmentData.Instance.EnsureLoaded())
@@ -59,7 +60,7 @@ public class HeroEquipmentDebug : MonoBehaviour
         var total = EquipmentData.Instance.SetCount;
 
         GUI.Label(new Rect(12, 12, 900, 24),
-            $"Equipment #{_currentSetIndex} {setName}  |  {torso}  |  {total} sets  |  [1] Next",
+            $"Equipment #{_currentSetIndex} {setName}  |  {torso}  |  {total} sets  |  [F1] Next",
             style);
     }
 }

@@ -21,33 +21,41 @@ public readonly struct WeaponGridEntry
 /// Bridges weapon world pickups and weapon-grid equipment with HeroWeaponVisual.
 /// </summary>
 public static class WeaponInventoryBridge
-
 {
-
     /// <summary>Max weapons parented to the hero at once (hands + back).</summary>
-
     public const int MaxEquippedWeapons = 5;
 
-
-
     /// <summary>Max weapons shown on the back mount when all are stowed.</summary>
-
     public const int MaxEquippedBackWeapons = 3;
 
-
+    /// <summary>When true, grid change events skip Sync (used during Import rebuild).</summary>
+    public static bool SuspendWeaponSync { get; set; }
 
     public static void ApplyInventoryToHero(Inventory inventory, PlayerHeroEntity hero)
-
     {
-
         if (!inventory || !hero || !hero.weaponVisual)
-
             return;
 
-
-
         hero.weaponVisual.SyncFromWeaponGrid(CollectWeaponGridEntries(inventory));
+    }
 
+    public static void ApplySavedEquipToHero(CharacterInventoryData data, PlayerHeroEntity hero)
+    {
+        if (data == null || !hero || !hero.weaponVisual)
+            return;
+
+        var right = data.equippedRightWeapon as SyntyWeaponItemData;
+        var left = data.equippedLeftWeapon as SyntyWeaponItemData;
+        hero.weaponVisual.ForceSetHands(right, left);
+    }
+
+    public static void CaptureEquipFromHero(CharacterInventoryData data, PlayerHeroEntity hero)
+    {
+        if (data == null || !hero || !hero.weaponVisual)
+            return;
+
+        data.equippedRightWeapon = hero.weaponVisual.equippedRight;
+        data.equippedLeftWeapon = hero.weaponVisual.equippedLeft;
     }
 
 

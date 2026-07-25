@@ -40,6 +40,9 @@ public class WeaponInventoryWatcher : MonoBehaviour
 
     public void RefreshBoundHero()
     {
+        if (WeaponInventoryBridge.SuspendWeaponSync)
+            return;
+
         var hero = ResolveBoundHero();
         if (!hero || !inventory)
             return;

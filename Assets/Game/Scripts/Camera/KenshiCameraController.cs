@@ -26,7 +26,7 @@ public class KenshiCameraController : MonoBehaviour
     public float zoomSpeed = 6f;
 
     [Header("Selection")]
-    public string playerTag = "Player";
+    public string playerTag = "Teammate";
     public LayerMask selectionLayers = ~0;
     public float selectionRayDistance = 500f;
 
@@ -188,10 +188,15 @@ public class KenshiCameraController : MonoBehaviour
         if (!Physics.Raycast(ray, out var hit, selectionRayDistance, selectionLayers, QueryTriggerInteraction.Ignore))
             return;
 
-        if (!hit.collider.CompareTag(playerTag))
+        var hitGo = hit.collider.gameObject;
+        var player = hit.collider.GetComponentInParent<PlayerController>();
+        if (player)
+            hitGo = player.gameObject;
+
+        // Prefer Teammate; keep legacy Player tag for old scenes.
+        if (!GameTags.IsTeammate(hitGo) && !hitGo.CompareTag(playerTag))
             return;
 
-        var player = hit.collider.GetComponentInParent<PlayerController>();
         if (!player)
             return;
 

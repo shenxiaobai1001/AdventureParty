@@ -2,7 +2,8 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Casual (Relax) vs Combat stance driven by resolved weapon loadout. Toggle with E while standing still.
+/// Casual (Relax) vs Combat stance driven by resolved weapon loadout. Toggle with E (cancels movement first).
+/// Also handles in-combat weapon swap: sheath old → unsheath new.
 /// </summary>
 public class PlayerStanceController : MonoBehaviour
 {
@@ -24,8 +25,10 @@ public class PlayerStanceController : MonoBehaviour
     HeroWeaponVisual _weaponVisual;
     PlayerActivityController _activity;
     Coroutine _switchTimeoutRoutine;
+    Coroutine _weaponSwapRoutine;
 
     StanceMode _targetStance;
+    bool _waitingSwitchEvent;
 
     public StanceMode CurrentStance { get; private set; } = StanceMode.Casual;
     public bool IsSwitching { get; private set; }
@@ -61,11 +64,7 @@ public class PlayerStanceController : MonoBehaviour
             return false;
         }
 
-        if (_player && !_player.IsStandingStill)
-        {
-            LogDebug("Blocked: must stand still to switch stance.");
-            return false;
-        }
+        _player?.CancelMovement();
 
         if (_activity && _activity.IsResting)
         {
@@ -86,7 +85,7 @@ public class PlayerStanceController : MonoBehaviour
 
         if (!_weaponVisual.HasDrawableWeapon)
         {
-            LogDebug("Blocked: no drawable weapon equipped in the weapon grid.");
+            LogDebug("Blocked: no drawable weapon equipped.");
             return false;
         }
 
@@ -102,39 +101,63 @@ public class PlayerStanceController : MonoBehaviour
         return true;
     }
 
-    public void OnWeaponSwitchEvent()
+    /// <summary>
+    /// While in combat: play sheath of previous loadout, then unsheath the new one.
+    /// While casual: no anim — weapons stay on back.
+    /// </summary>
+    public void BeginDrawnWeaponSwap(
+        SyntyWeaponItemData oldRight,
+        SyntyWeaponItemData oldLeft,
+        SyntyWeaponItemData newRight,
+        SyntyWeaponItemData newLeft)
     {
-        _weaponVisual?.ApplyPendingAttach();
-        CompleteSwitch();
-    }
-
-    void CompleteSwitch()
-    {
-        if (!IsSwitching)
+        if (!_weaponVisual)
             return;
 
-        if (_switchTimeoutRoutine != null)
+        if (CurrentStance != StanceMode.Combat || !_animator)
         {
-            StopCoroutine(_switchTimeoutRoutine);
-            _switchTimeoutRoutine = null;
+            _weaponVisual.ForceSetHands(newRight, newLeft);
+            _weaponVisual.PlaceWeaponsForCasualStance();
+            return;
         }
 
-        var loadout = _weaponVisual != null ? _weaponVisual.CurrentLoadout : ResolvedCombatLoadout.Empty;
-        if (_targetStance == StanceMode.Combat)
-            CombatAnimBinding.FinalizeCombat(_animator, loadout);
-        else
-            CombatAnimBinding.FinalizeRelax(_animator);
+        if (IsSwitching)
+        {
+            LogDebug("Blocked: already switching; applying new hands instantly.");
+            _weaponVisual.ForceSetHands(newRight, newLeft);
+            _weaponVisual.PlaceWeaponsForCombatStance();
+            CombatAnimBinding.FinalizeCombat(_animator, _weaponVisual.CurrentLoadout);
+            return;
+        }
 
-        CurrentStance = _targetStance;
-        IsSwitching = false;
-        LogDebug($"Switch complete: now {CurrentStance}");
+        if (_weaponSwapRoutine != null)
+            StopCoroutine(_weaponSwapRoutine);
+
+        _weaponSwapRoutine = StartCoroutine(WeaponSwapRoutine(oldRight, oldLeft, newRight, newLeft));
+    }
+
+    public void OnWeaponSwitchEvent()
+    {
+        if (_waitingSwitchEvent)
+        {
+            _weaponVisual?.ApplyPendingAttach();
+            _waitingSwitchEvent = false;
+            return;
+        }
+
+        _weaponVisual?.ApplyPendingAttach();
+        CompleteSwitch();
     }
 
     void EnterCasualInstant()
     {
         CurrentStance = StanceMode.Casual;
         IsSwitching = false;
-        RpgAnimParams.ApplyRelaxMode(_animator, true);
+        var loadout = _weaponVisual != null ? _weaponVisual.CurrentLoadout : ResolvedCombatLoadout.Empty;
+        if (loadout.HasDrawableWeapon)
+            CombatAnimBinding.EnsureForLoadout(_animator, loadout, drawn: false);
+        else
+            RpgAnimParams.ApplyRelaxMode(_animator, true);
     }
 
     void BeginEnterCombat()
@@ -177,9 +200,92 @@ public class PlayerStanceController : MonoBehaviour
         }
     }
 
+    IEnumerator WeaponSwapRoutine(
+        SyntyWeaponItemData oldRight,
+        SyntyWeaponItemData oldLeft,
+        SyntyWeaponItemData newRight,
+        SyntyWeaponItemData newLeft)
+    {
+        IsSwitching = true;
+        _player?.CancelMovement();
+        LogDebug("Weapon swap: sheath old → unsheath new");
+
+        // Show old weapons in hands for sheath anim.
+        _weaponVisual.ForceSetHands(oldRight, oldLeft);
+        _weaponVisual.PlaceWeaponsForCombatStance();
+        var oldLoadout = _weaponVisual.CurrentLoadout;
+
+        _weaponVisual.RequestAttachOnSwitch(HeroWeaponVisual.AttachTarget.BackMount);
+        CombatAnimBinding.BeginSheathToRelax(_animator, oldLoadout);
+        yield return WaitForSwitchEventOrTimeout(1.15f);
+        _weaponVisual.ApplyPendingAttach();
+
+        // Apply new equip and draw.
+        _weaponVisual.ForceSetHands(newRight, newLeft);
+        if (!newRight && !newLeft)
+        {
+            CombatAnimBinding.FinalizeRelax(_animator, ResolvedCombatLoadout.Empty);
+            CurrentStance = StanceMode.Casual;
+            IsSwitching = false;
+            _weaponSwapRoutine = null;
+            LogDebug("Weapon swap complete: unequipped → casual");
+            yield break;
+        }
+
+        _weaponVisual.RequestAttachOnSwitch(HeroWeaponVisual.AttachTarget.Hand);
+        CombatAnimBinding.BeginUnsheathFromRelax(_animator, _weaponVisual.CurrentLoadout);
+        yield return WaitForSwitchEventOrTimeout(1.35f);
+        _weaponVisual.ApplyPendingAttach();
+        CombatAnimBinding.FinalizeCombat(_animator, _weaponVisual.CurrentLoadout);
+
+        CurrentStance = StanceMode.Combat;
+        IsSwitching = false;
+        _weaponSwapRoutine = null;
+        LogDebug("Weapon swap complete");
+    }
+
+    IEnumerator WaitForSwitchEventOrTimeout(float timeout)
+    {
+        _waitingSwitchEvent = true;
+        var elapsed = 0f;
+        while (_waitingSwitchEvent && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (_waitingSwitchEvent)
+        {
+            LogDebug("WeaponSwitch event timeout.");
+            _waitingSwitchEvent = false;
+        }
+    }
+
+    void CompleteSwitch()
+    {
+        if (!IsSwitching)
+            return;
+
+        if (_switchTimeoutRoutine != null)
+        {
+            StopCoroutine(_switchTimeoutRoutine);
+            _switchTimeoutRoutine = null;
+        }
+
+        var loadout = _weaponVisual != null ? _weaponVisual.CurrentLoadout : ResolvedCombatLoadout.Empty;
+        if (_targetStance == StanceMode.Combat)
+            CombatAnimBinding.FinalizeCombat(_animator, loadout);
+        else
+            CombatAnimBinding.FinalizeRelax(_animator, loadout);
+
+        CurrentStance = _targetStance;
+        IsSwitching = false;
+        LogDebug($"Switch complete: now {CurrentStance}");
+    }
+
     IEnumerator SwitchTimeoutRoutine()
     {
-        var delay = _targetStance == StanceMode.Casual ? 0.65f : 1.2f;
+        var delay = _targetStance == StanceMode.Casual ? 1.1f : 1.35f;
         yield return new WaitForSeconds(delay);
 
         if (!IsSwitching)

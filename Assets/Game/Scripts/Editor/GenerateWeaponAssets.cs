@@ -85,7 +85,7 @@ public static class GenerateWeaponAssets
         foreach (var row in rows)
         {
             var stem = Path.GetFileNameWithoutExtension(row.GetWorldPrefabAssetPath()).Replace("_World", string.Empty);
-            var assetPath = $"{ItemsFolder}/{stem}.asset";
+            var assetPath = ResolveItemAssetPath(stem, row.GetCategory());
             var item = AssetDatabase.LoadAssetAtPath<SyntyWeaponItemData>(assetPath);
             if (!item)
                 continue;
@@ -151,6 +151,53 @@ public static class GenerateWeaponAssets
         EditorUtility.DisplayDialog(
             "Weapon Items",
             $"Refreshed {updated} SyntyWeaponItemData assets from CSV.",
+            "OK");
+    }
+
+    [MenuItem("Game/Weapon/5. Rematch Folders + Rebuild World Prefabs From CSV")]
+    public static void RematchFoldersAndWorldPrefabsFromCsv()
+    {
+        if (!File.Exists(ItemsCsvPath))
+        {
+            EditorUtility.DisplayDialog("Weapon Rematch", "WeaponItems.csv not found.", "OK");
+            return;
+        }
+
+        var rows = LoadItemRowsFromCsv();
+        EnsureFolder(ItemsFolder);
+        EnsureFolder(WorldFolder);
+
+        var moved = 0;
+        var updatedItems = 0;
+        var rebuiltWorld = 0;
+
+        for (var i = 0; i < rows.Count; i++)
+        {
+            var row = rows[i];
+            EditorUtility.DisplayProgressBar("Rematch Weapons", row.name, i / (float)rows.Count);
+
+            var stem = Path.GetFileNameWithoutExtension(row.GetWorldPrefabAssetPath()).Replace("_World", string.Empty);
+            var category = row.GetCategory();
+            var before = ResolveItemAssetPath(stem, category);
+            var item = CreateOrUpdateItemAsset(row);
+            if (item)
+                updatedItems++;
+
+            var after = ResolveItemAssetPath(stem, category);
+            if (!string.Equals(before, after, System.StringComparison.OrdinalIgnoreCase))
+                moved++;
+
+            if (CreateOrUpdateWorldPrefab(row, item))
+                rebuiltWorld++;
+        }
+
+        EditorUtility.ClearProgressBar();
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.DisplayDialog(
+            "Weapon Rematch",
+            $"ItemData updated: {updatedItems}\nFolder moves (approx): {moved}\nWorld prefabs rebuilt: {rebuiltWorld}\n\nCSV is source of truth for category folders.",
             "OK");
     }
 
@@ -248,7 +295,23 @@ public static class GenerateWeaponAssets
     static SyntyWeaponItemData CreateOrUpdateItemAsset(WeaponItemRow row)
     {
         var stem = Path.GetFileNameWithoutExtension(row.GetWorldPrefabAssetPath()).Replace("_World", string.Empty);
-        var assetPath = $"{ItemsFolder}/{stem}.asset";
+        var category = row.GetCategory();
+        var categoryFolder = $"{ItemsFolder}/{category}";
+        EnsureFolder(categoryFolder);
+        var assetPath = ResolveItemAssetPath(stem, category);
+        // If asset was in another category folder, keep GUID by moving into the CSV category folder.
+        if (!assetPath.StartsWith(categoryFolder + "/", System.StringComparison.OrdinalIgnoreCase)
+            && assetPath.StartsWith(ItemsFolder + "/", System.StringComparison.OrdinalIgnoreCase))
+        {
+            var targetPath = $"{categoryFolder}/{stem}.asset";
+            var moveError = AssetDatabase.MoveAsset(assetPath, targetPath);
+            if (string.IsNullOrEmpty(moveError))
+                assetPath = targetPath;
+        }
+
+        if (!assetPath.StartsWith(categoryFolder + "/", System.StringComparison.OrdinalIgnoreCase))
+            assetPath = $"{categoryFolder}/{stem}.asset";
+
         var item = AssetDatabase.LoadAssetAtPath<SyntyWeaponItemData>(assetPath);
         if (!item)
         {
@@ -273,6 +336,27 @@ public static class GenerateWeaponAssets
 
         EditorUtility.SetDirty(item);
         return item;
+    }
+
+    static string ResolveItemAssetPath(string stem, WeaponCategory category)
+    {
+        var preferred = $"{ItemsFolder}/{category}/{stem}.asset";
+        if (AssetDatabase.LoadAssetAtPath<SyntyWeaponItemData>(preferred))
+            return preferred;
+
+        var flat = $"{ItemsFolder}/{stem}.asset";
+        if (AssetDatabase.LoadAssetAtPath<SyntyWeaponItemData>(flat))
+            return flat;
+
+        var guids = AssetDatabase.FindAssets(stem + " t:SyntyWeaponItemData", new[] { ItemsFolder });
+        foreach (var guid in guids)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            if (Path.GetFileNameWithoutExtension(path) == stem)
+                return path;
+        }
+
+        return preferred;
     }
 
     static bool CreateOrUpdateWorldPrefab(WeaponItemRow row, SyntyWeaponItemData itemAsset)

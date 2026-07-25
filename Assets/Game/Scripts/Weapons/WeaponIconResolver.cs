@@ -37,7 +37,21 @@ public static class WeaponIconResolver
         if (path.StartsWith("Assets/"))
             return path;
 
-        return $"{WeaponIconStudioSettings.OutputRoot}/{path}";
+        // Prefer explicit category subfolders: Art/Icons/Weapons/<Category>/file.png
+        var fileName = System.IO.Path.GetFileName(path);
+#if UNITY_EDITOR
+        var matches = AssetDatabase.FindAssets(
+            System.IO.Path.GetFileNameWithoutExtension(fileName) + " t:Texture2D",
+            new[] { WeaponIconStudioSettings.OutputRoot });
+        foreach (var guid in matches)
+        {
+            var candidate = AssetDatabase.GUIDToAssetPath(guid);
+            if (string.Equals(System.IO.Path.GetFileName(candidate), fileName, System.StringComparison.OrdinalIgnoreCase))
+                return candidate;
+        }
+#endif
+
+        return $"{WeaponIconStudioSettings.OutputRoot}/{fileName}";
     }
 
 #if !UNITY_EDITOR

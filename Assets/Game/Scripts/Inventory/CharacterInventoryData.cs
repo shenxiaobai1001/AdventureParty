@@ -21,6 +21,10 @@ public class CharacterInventoryData
     public List<PlacedInventoryItemData> items = new List<PlacedInventoryItemData>();
     public float maxCarryWeight = 39f;
 
+    /// <summary>Persisted weapon-bar equip (hand slots). ItemData refs to SyntyWeaponItemData.</summary>
+    public ItemData equippedRightWeapon;
+    public ItemData equippedLeftWeapon;
+
     public float GetTotalWeight()
     {
         var total = 0f;

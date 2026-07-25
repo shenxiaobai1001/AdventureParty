@@ -6,6 +6,8 @@ using UnityEngine;
 public class HeroCombatProficiency : MonoBehaviour
 {
     [SerializeField] CharacterEntry characterEntry;
+    [Tooltip("Log XP awards from CombatSimXp.")]
+    public bool debugXp = true;
 
     public CharacterEntry CharacterEntry
     {
@@ -21,14 +23,23 @@ public class HeroCombatProficiency : MonoBehaviour
     {
         get
         {
-            characterEntry?.EnsureCombatDefaults();
+            EnsureProfile();
             return characterEntry != null ? characterEntry.combatProficiency : null;
         }
     }
 
     void Awake()
     {
-        characterEntry?.EnsureCombatDefaults();
+        EnsureProfile();
+    }
+
+    public CombatProficiencyProfile EnsureProfile()
+    {
+        if (characterEntry == null)
+            characterEntry = new CharacterEntry { displayName = gameObject.name };
+
+        characterEntry.EnsureCombatDefaults();
+        return characterEntry.combatProficiency;
     }
 
     public void BindCharacterEntry(CharacterEntry entry)
@@ -49,5 +60,16 @@ public class HeroCombatProficiency : MonoBehaviour
     public float GetFightAttributeLevel(FightAttributeType type)
     {
         return Profile != null ? Profile.GetFightAttributeLevel(type) : 1f;
+    }
+
+    public WeaponProficiencyType GetEquippedWeaponType()
+    {
+        var visual = GetComponent<HeroWeaponVisual>();
+        if (visual && visual.equippedRight)
+            return visual.equippedRight.proficiencyType;
+        if (visual && visual.equippedLeft
+            && visual.equippedLeft.category != WeaponCategory.Shield)
+            return visual.equippedLeft.proficiencyType;
+        return WeaponProficiencyType.MartialArts;
     }
 }

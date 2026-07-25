@@ -13,6 +13,8 @@ namespace UInventoryGrid
         [Tooltip("Reference to the item panel UI element.")]
         public ItemPanelUI itemPanel;
         private Item currentItemWithPanel;
+        int _rightClickHandledFrame = -1;
+        Item _rightClickHandledItem;
 
         private void Awake()
         {
@@ -92,6 +94,10 @@ namespace UInventoryGrid
         /// </summary>
         private void HandleMouseInput()
         {
+            // UIEquip uses raw Input for open/close; inventory must not steal the same click.
+            if (UIEquipPanel.BlocksInventoryInput)
+                return;
+
             if (Input.GetMouseButtonDown(0))
             {
                 // Prevent clicking on items when inspect panel is active.
@@ -130,6 +136,30 @@ namespace UInventoryGrid
                         SelectItemWithMouse(slotPosition);
                     }
                 }
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                // Right-click via Input (not only EventSystem) so weapon-bar UIEquip always opens.
+                if (inventory.selectedItem != null)
+                    return;
+
+                if (inventory.gridOnMouse == null)
+                    return;
+
+                Vector2Int slotPosition = inventory.GetSlotAtMouseCoords();
+                if (inventory.ReachedBoundary(slotPosition, inventory.gridOnMouse))
+                    return;
+
+                Item item = GetItemAtSlot(slotPosition);
+                if (item == null)
+                    return;
+
+                var eventData = new PointerEventData(EventSystem.current != null ? EventSystem.current : null)
+                {
+                    button = PointerEventData.InputButton.Right,
+                    position = Input.mousePosition
+                };
+                OnItemClick(item, eventData);
             }
             else if (Input.GetMouseButtonDown(2))
             {
@@ -444,7 +474,94 @@ namespace UInventoryGrid
         /// <param name="eventData">The event data for the click.</param>
         public void OnItemClick(Item item, PointerEventData eventData)
         {
-            if (itemPanel == null)
+            if (eventData == null || eventData.button != PointerEventData.InputButton.Right || item == null)
+            {
+                TryOpenLegacyItemPanel(item, eventData);
+                return;
+            }
+
+            // Input + EventSystem can both fire on the same right-click.
+            if (_rightClickHandledFrame == Time.frameCount && _rightClickHandledItem == item)
+                return;
+            _rightClickHandledFrame = Time.frameCount;
+            _rightClickHandledItem = item;
+
+            // Weapon bar right-click → UIEquip (equip / unequip).
+            if (IsWeaponBarItem(item))
+            {
+                var visual = ResolveHeroWeaponVisual(item);
+                if (!visual)
+                {
+                    Debug.LogWarning("[Inventory] 右键装备失败：未找到英雄 HeroWeaponVisual。请先打开角色面板并绑定角色。");
+                    return;
+                }
+
+                if (itemPanel != null && itemPanel.gameObject.activeSelf)
+                    itemPanel.gameObject.SetActive(false);
+
+                var equipUi = UIEquipPanel.FindOrCreate();
+                if (!equipUi)
+                {
+                    Debug.LogError("[Inventory] UIEquipPanel.FindOrCreate 失败。");
+                    return;
+                }
+
+                equipUi.Open(item, visual);
+                return;
+            }
+
+            var gridName = item.inventoryGrid != null ? item.inventoryGrid.name : "(null)";
+            Debug.Log($"[Inventory] 右键物品不在武器栏: grid={gridName}, type={item.data?.itemType}, data={item.data?.GetType().Name}");
+            TryOpenLegacyItemPanel(item, eventData);
+        }
+
+        static bool IsWeaponBarItem(Item item)
+        {
+            if (item?.data == null)
+                return false;
+
+            var gridName = item.inventoryGrid != null ? item.inventoryGrid.name : null;
+            if (RoleInventoryTypes.IsWeaponGrid(gridName))
+                return item.data is SyntyWeaponItemData || IsWeaponItemType(item.data.itemType);
+
+            // Fallback: weapon data sitting on a grid whose name contains Weapon.
+            if (!string.IsNullOrEmpty(gridName)
+                && gridName.IndexOf("Weapon", System.StringComparison.OrdinalIgnoreCase) >= 0
+                && item.data is SyntyWeaponItemData)
+                return true;
+
+            return false;
+        }
+
+        static bool IsWeaponItemType(ItemType type)
+        {
+            return type == ItemType.Weapon
+                || type == ItemType.WeaponPrimary
+                || type == ItemType.WeaponSecondary;
+        }
+
+        HeroWeaponVisual ResolveHeroWeaponVisual(Item item)
+        {
+            var rolePanel = inventory ? inventory.GetComponent<UIRolePanelController>() : null;
+            if (!rolePanel && item && item.inventory)
+                rolePanel = item.inventory.GetComponent<UIRolePanelController>();
+            if (!rolePanel)
+                rolePanel = Object.FindFirstObjectByType<UIRolePanelController>(FindObjectsInactive.Include);
+
+            var hero = rolePanel ? rolePanel.ResolveBoundHero() : null;
+            if (hero && hero.weaponVisual)
+                return hero.weaponVisual;
+
+            var entity = Object.FindFirstObjectByType<PlayerHeroEntity>();
+            if (entity && entity.weaponVisual)
+                return entity.weaponVisual;
+
+            return Object.FindFirstObjectByType<HeroWeaponVisual>();
+        }
+
+        void TryOpenLegacyItemPanel(Item item, PointerEventData eventData)
+        {
+            if (itemPanel == null || eventData == null || item == null)
                 return;
 
             if (!itemPanel.gameObject.activeSelf && eventData.button == PointerEventData.InputButton.Right)

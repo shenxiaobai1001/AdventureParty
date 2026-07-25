@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// Role state panel: body attributes, fight attributes, weapon arts; XP progress on select.
 /// PropertyPanel/Content/{Power,Tough,Flexible,Accurate}
 /// CombatPanel/Content/{ATK,Defense,Perception}
-/// WeaponPanel/Content/{Greatsword,Heavyweapons,...,MartialArts|Dagger,Gunpowder,Throw}
+/// WeaponPanel/Content/{Sword,Greatsword,Hammer,HeavyHammer,Axe,HeavyAxe,LongHandled,Wand,Bow,Bolt,Longgun,Shortgun,Shield,Throw,Wushu}
 /// </summary>
 public class UIStatePanel : MonoBehaviour
 {
@@ -27,22 +27,24 @@ public class UIStatePanel : MonoBehaviour
         { "Perception", FightAttributeType.Awareness },
     };
 
+    /// <summary>Hierarchy child name under WeaponPanel/Content → proficiency line.</summary>
     static readonly Dictionary<string, WeaponProficiencyType> WeaponNodeMap = new Dictionary<string, WeaponProficiencyType>(StringComparer.OrdinalIgnoreCase)
     {
+        { "Sword", WeaponProficiencyType.Sword },
         { "Greatsword", WeaponProficiencyType.GreatSword },
-        { "Heavyweapons", WeaponProficiencyType.HeavyWeapon },
-        { "LongHandled", WeaponProficiencyType.Polearm },
-        { "Bow", WeaponProficiencyType.BowCrossbow },
+        { "Hammer", WeaponProficiencyType.Hammer },
+        { "HeavyHammer", WeaponProficiencyType.GreatHammer },
+        { "Axe", WeaponProficiencyType.Axe },
+        { "HeavyAxe", WeaponProficiencyType.GreatAxe },
+        { "LongHandled", WeaponProficiencyType.Spear },
+        { "Wand", WeaponProficiencyType.Staff },
+        { "Bow", WeaponProficiencyType.Bow },
+        { "Bolt", WeaponProficiencyType.Crossbow },
+        { "Longgun", WeaponProficiencyType.LongGun },
+        { "Shortgun", WeaponProficiencyType.ShortGun },
         { "Shield", WeaponProficiencyType.Shield },
-        { "Sword", WeaponProficiencyType.Longsword },
-        { "HammerAxe", WeaponProficiencyType.HammerAxe },
-        { "MartialArts", WeaponProficiencyType.MartialArts },
-        { "Martial", WeaponProficiencyType.MartialArts },
-        { "Wushu", WeaponProficiencyType.MartialArts },
-        // Legacy panel node name — remap if the prefab row is still called Dagger.
-        { "Dagger", WeaponProficiencyType.MartialArts },
-        { "Gunpowder", WeaponProficiencyType.Firearm },
         { "Throw", WeaponProficiencyType.Throwing },
+        { "Wushu", WeaponProficiencyType.MartialArts },
     };
 
     [Header("Optional Overrides")]

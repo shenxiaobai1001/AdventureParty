@@ -27,11 +27,14 @@ public static class WeaponIconStudioSettings
         {
             case WeaponCategory.Shield:
             case WeaponCategory.Bow:
+            case WeaponCategory.Crossbow:
                 return FramePadding + 0.05f;
-            case WeaponCategory.Polearm2H:
-            case WeaponCategory.GreatSword2H:
-            case WeaponCategory.HeavyWeapon2H:
-            case WeaponCategory.FirearmRifle:
+            case WeaponCategory.Spear:
+            case WeaponCategory.Staff:
+            case WeaponCategory.GreatSword:
+            case WeaponCategory.GreatHammer:
+            case WeaponCategory.GreatAxe:
+            case WeaponCategory.LongGun:
                 return FramePadding + 0.1f;
             default:
                 return FramePadding;

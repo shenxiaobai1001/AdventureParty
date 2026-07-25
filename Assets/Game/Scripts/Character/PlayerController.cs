@@ -90,8 +90,21 @@ public class PlayerController : MonoBehaviour
         if (_animator && !_animator.GetComponent<RpgAnimatorEvents>())
             _animator.gameObject.AddComponent<RpgAnimatorEvents>();
 
+        // Hero movement is CharacterController-driven; attack root motion sinks the mesh into the ground.
+        if (_animator)
+            _animator.applyRootMotion = false;
+
         if (!GetComponent<EquipmentPickupInteractor>())
             gameObject.AddComponent<EquipmentPickupInteractor>();
+
+        if (!GetComponent<CombatMovePlayer>())
+            gameObject.AddComponent<CombatMovePlayer>();
+
+        if (!GetComponent<CombatHealth>())
+            gameObject.AddComponent<CombatHealth>();
+
+        if (!GetComponent<CombatBrain>())
+            gameObject.AddComponent<CombatBrain>();
     }
 
     void Start()
@@ -99,8 +112,22 @@ public class PlayerController : MonoBehaviour
         if (Selected)
             return;
 
+        // Prefer a Teammate when multiple PlayerControllers exist (player + NPC clones).
         var players = FindObjectsOfType<PlayerController>();
-        if (players.Length == 1 && players[0] == this)
+        PlayerController teammate = null;
+        for (var i = 0; i < players.Length; i++)
+        {
+            var p = players[i];
+            if (p && GameTags.IsTeammate(p.gameObject))
+            {
+                teammate = p;
+                break;
+            }
+        }
+
+        if (teammate)
+            Select(teammate);
+        else if (players.Length == 1 && players[0] == this)
             Select(this);
     }
 
@@ -121,7 +148,12 @@ public class PlayerController : MonoBehaviour
                 TryToggleCasualLocomotion();
         }
 
-        if (Input.GetMouseButtonDown(1) && !IsPointerOverUi() && !IsMovementBlocked())
+        if (Input.GetMouseButtonDown(1)
+            && !IsPointerOverUi()
+            && !IsMovementBlocked()
+            && !UIFloatOperationPanel.BlocksWorldInput
+            && !WorldContextMenuInput.ConsumedRmbThisFrame
+            && !IsRmbOnContextTarget())
             TrySetDestinationFromMouse();
 
         UpdateMovement();
@@ -300,6 +332,31 @@ public class PlayerController : MonoBehaviour
         _animator.SetFloat(RpgAnimParams.VelocityZ, 0f);
         _animator.SetBool(RpgAnimParams.Moving, false);
         _animator.SetBool(RpgAnimParams.Sprint, false);
+    }
+
+    bool IsRmbOnContextTarget()
+    {
+        var cam = Camera.main;
+        if (!cam)
+            return false;
+
+        var ray = cam.ScreenPointToRay(Input.mousePosition);
+        var hits = Physics.RaycastAll(ray, groundRayMaxDistance, groundLayers, QueryTriggerInteraction.Ignore);
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        for (var i = 0; i < hits.Length; i++)
+        {
+            var col = hits[i].collider;
+            if (!col)
+                continue;
+
+            var other = col.GetComponentInParent<PlayerController>();
+            var go = other ? other.gameObject : col.transform.root.gameObject;
+            if (GameTags.IsContextTarget(go))
+                return true;
+        }
+
+        return false;
     }
 
     static bool IsPointerOverUi()

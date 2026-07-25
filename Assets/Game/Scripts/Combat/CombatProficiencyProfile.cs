@@ -95,6 +95,9 @@ public class CombatProficiencyProfile
     {
         foreach (WeaponProficiencyType type in Enum.GetValues(typeof(WeaponProficiencyType)))
         {
+            if (type == WeaponProficiencyType.ObsoleteDagger)
+                continue;
+
             if (ContainsWeapon(type))
                 continue;
 

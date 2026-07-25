@@ -35,6 +35,9 @@ namespace UInventoryGrid
         [Tooltip("The icon representing the search.")]
         public Image searchIcon;
 
+        [Tooltip("Shown when this weapon is equipped on the hero (weapon bar).")]
+        public Image equippedMarker;
+
         [Tooltip("Indicates whether the item is revealed or hidden.")]
         public bool revealed;
 

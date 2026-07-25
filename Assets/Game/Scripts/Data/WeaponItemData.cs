@@ -54,20 +54,17 @@ public class WeaponItemRow : NamedData
 
     public WeaponCategory GetCategory()
     {
-        return System.Enum.TryParse(category, true, out WeaponCategory parsed)
+        return WeaponClassifier.TryParseCategory(category, out var parsed)
             ? parsed
-            : WeaponCategory.Misc1H;
+            : WeaponCategory.Sword;
     }
 
     public WeaponProficiencyType GetProficiencyType()
     {
         if (HasProficiencyOverride())
         {
-            if (System.Enum.TryParse(proficiencyType, true, out WeaponProficiencyType overridden))
+            if (WeaponClassifier.TryParseProficiency(proficiencyType, out var overridden))
                 return overridden;
-
-            if (string.Equals(proficiencyType, "Dagger", System.StringComparison.OrdinalIgnoreCase))
-                return WeaponProficiencyType.MartialArts;
         }
 
         return WeaponClassifier.GetProficiencyType(GetCategory());
@@ -90,14 +87,7 @@ public class WeaponItemRow : NamedData
 
     public string GetIconAssetPath()
     {
-        if (string.IsNullOrWhiteSpace(icon))
-            return string.Empty;
-
-        var path = icon.Trim().Replace('\\', '/');
-        if (!path.StartsWith("Assets/"))
-            path = WeaponIconStudioSettings.OutputRoot + "/" + path;
-
-        return path;
+        return WeaponIconResolver.BuildAssetPath(icon);
     }
 
     public string GetWorldPrefabAssetPath()

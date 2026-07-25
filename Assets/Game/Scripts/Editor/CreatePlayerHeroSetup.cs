@@ -256,6 +256,46 @@ public static class CreatePlayerHeroSetup
             weaponVisual.offHandLocalPosition,
             weaponVisual.offHandLocalEuler);
 
+        // Known-good shield grip (from playtest). Always refresh so old serialized zeros don't stick.
+        weaponVisual.shieldHandLocalPosition = new Vector3(0.05f, 0.01f, -0.07f);
+        weaponVisual.shieldHandLocalEuler = new Vector3(-70.5f, -168f, -5f);
+
+        weaponVisual.shieldHandSocket = EnsureHandMountSocket(
+            instance.transform,
+            handLeft,
+            weaponVisual.shieldHandSocket,
+            "Socket_WeaponHand_Shield",
+            weaponVisual.shieldHandLocalPosition,
+            weaponVisual.shieldHandLocalEuler);
+
+        if (weaponVisual.shieldHandSocket)
+        {
+            weaponVisual.shieldHandSocket.localPosition = weaponVisual.shieldHandLocalPosition;
+            weaponVisual.shieldHandSocket.localEulerAngles = weaponVisual.shieldHandLocalEuler;
+            weaponVisual.shieldHandSocket.localScale = Vector3.one;
+            EditorUtility.SetDirty(weaponVisual.shieldHandSocket.gameObject);
+        }
+
+        // Known-good bow grip (from playtest).
+        weaponVisual.bowHandLocalPosition = new Vector3(-0.1f, -0.03f, 0.03f);
+        weaponVisual.bowHandLocalEuler = new Vector3(-0.07f, -88f, 85f);
+
+        weaponVisual.bowHandSocket = EnsureHandMountSocket(
+            instance.transform,
+            handLeft,
+            weaponVisual.bowHandSocket,
+            "Socket_WeaponHand_Bow",
+            weaponVisual.bowHandLocalPosition,
+            weaponVisual.bowHandLocalEuler);
+
+        if (weaponVisual.bowHandSocket)
+        {
+            weaponVisual.bowHandSocket.localPosition = weaponVisual.bowHandLocalPosition;
+            weaponVisual.bowHandSocket.localEulerAngles = weaponVisual.bowHandLocalEuler;
+            weaponVisual.bowHandSocket.localScale = Vector3.one;
+            EditorUtility.SetDirty(weaponVisual.bowHandSocket.gameObject);
+        }
+
         if (backBone)
         {
             weaponVisual.backMountSocket = weaponVisual.backMountSocket
@@ -345,6 +385,18 @@ public static class CreatePlayerHeroSetup
         if (!instance.GetComponent<HeroCombatProficiency>())
             instance.AddComponent<HeroCombatProficiency>();
 
+        if (!instance.GetComponent<CombatMovePlayer>())
+            instance.AddComponent<CombatMovePlayer>();
+
+        if (!instance.GetComponent<CombatHealth>())
+            instance.AddComponent<CombatHealth>();
+
+        if (!instance.GetComponent<MeleeAttackController>())
+            instance.AddComponent<MeleeAttackController>();
+
+        if (!instance.GetComponent<CombatBrain>())
+            instance.AddComponent<CombatBrain>();
+
         var cc = instance.GetComponent<CharacterController>();
         if (!cc)
             cc = instance.AddComponent<CharacterController>();
@@ -355,8 +407,11 @@ public static class CreatePlayerHeroSetup
         cc.slopeLimit = 45f;
         cc.stepOffset = 0.3f;
 
-        if (!instance.CompareTag("Player"))
-            instance.tag = "Player";
+        // Player-squad heroes use Teammate (legacy "Player" still selectable).
+        if (!instance.CompareTag(GameTags.Teammate) && !instance.CompareTag(GameTags.Player))
+            instance.tag = GameTags.Teammate;
+        else if (instance.CompareTag(GameTags.Player))
+            instance.tag = GameTags.Teammate;
     }
 
     static void EnsureFolder(string path)

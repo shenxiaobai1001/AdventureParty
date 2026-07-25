@@ -163,10 +163,28 @@ public class UIRolePanelController : MonoBehaviour
         isOpen = true;
         gameObject.SetActive(true);
 
+        UIEquipPanel.FindOrCreate();
+
         RefreshHeader();
         RoleInventoryPersistence.Import(inventory, entry.inventory);
         equipmentWatcher?.RefreshBoundHero();
         weaponWatcher?.RefreshBoundHero();
+
+        var hero = ResolveBoundHero();
+        if (hero)
+        {
+            // Restore hand equip after Import (Sync alone does not re-equip).
+            WeaponInventoryBridge.ApplySavedEquipToHero(entry.inventory, hero);
+            weaponWatcher?.RefreshBoundHero();
+            if (hero.weaponVisual)
+            {
+                var stance = hero.GetComponent<PlayerStanceController>();
+                if (!stance || stance.CurrentStance != PlayerStanceController.StanceMode.Combat)
+                    hero.weaponVisual.PlaceWeaponsForCasualStance();
+                ItemVisualLayout.RefreshEquippedMarkersInOpenInventories(hero.weaponVisual);
+            }
+        }
+
         RefreshWeightDisplay();
     }
 
@@ -177,15 +195,38 @@ public class UIRolePanelController : MonoBehaviour
 
         if (boundEntry != null && inventory)
         {
+            var prevRight = boundEntry.inventory.equippedRightWeapon;
+            var prevLeft = boundEntry.inventory.equippedLeftWeapon;
             var exported = RoleInventoryPersistence.Export(inventory);
             exported.maxCarryWeight = boundEntry.inventory.maxCarryWeight;
             boundEntry.inventory = exported;
+
+            var hero = ResolveBoundHero();
+            if (hero)
+                WeaponInventoryBridge.CaptureEquipFromHero(boundEntry.inventory, hero);
+            else
+            {
+                boundEntry.inventory.equippedRightWeapon = prevRight;
+                boundEntry.inventory.equippedLeftWeapon = prevLeft;
+            }
         }
 
         boundEntry = null;
         isOpen = false;
         inventory?.DeselectItem();
         gameObject.SetActive(false);
+    }
+
+    /// <summary>Write current hand equip into the bound character entry (markers persist).</summary>
+    public void PersistBoundEquip()
+    {
+        if (boundEntry == null)
+            return;
+
+        boundEntry.inventory ??= new CharacterInventoryData();
+        var hero = ResolveBoundHero();
+        if (hero)
+            WeaponInventoryBridge.CaptureEquipFromHero(boundEntry.inventory, hero);
     }
 
     void RefreshHeader()

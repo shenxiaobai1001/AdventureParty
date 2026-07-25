@@ -20,5 +20,9 @@
 Assets/Synty/
 Assets/Synty.meta
 
+# Warrior Mecanim 等动画商包（ExplosiveLLC 等），各机本地导入
+Assets/Newanimaton/
+Assets/Newanimaton.meta
+
 # 编辑器个人设置
 UserSettings/

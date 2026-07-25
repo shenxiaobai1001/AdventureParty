@@ -17,6 +17,16 @@ public class SyntyWeaponItemData : ItemData
     public bool renderVertical;
     public string iconFileName;
 
+    [Header("Melee Sweep (optional override)")]
+    [Tooltip("When true, use the local root/tip/radius below instead of mesh auto-fit.")]
+    public bool overrideMeleeSweep;
+    [Tooltip("Blade near end in weapon-instance local space.")]
+    public Vector3 meleeSweepLocalRoot = Vector3.zero;
+    [Tooltip("Blade tip in weapon-instance local space.")]
+    public Vector3 meleeSweepLocalTip = new Vector3(0f, 0f, 0.75f);
+    [Tooltip("Capsule radius around the blade.")]
+    public float meleeSweepRadius = 0.08f;
+
     public Sprite ResolveIcon()
     {
         if (icon)

@@ -56,7 +56,7 @@ namespace Sinbad {
             bool isValueType = typeof(T).IsValueType;
             string line;
             while((line = rdr.ReadLine()) != null) {
-                if (line[0]=='#')
+                if (string.IsNullOrWhiteSpace(line) || line[0]=='#')
                     continue;
                 var obj = new T();
                 // box manually to avoid issues with structs
@@ -100,7 +100,7 @@ namespace Sinbad {
             string line;
             while((line = rdr.ReadLine()) != null) {
                 // Ignore optional header lines
-                if (line.StartsWith("#"))
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
                     continue;
 
                 string[] vals = EnumerateCsvLine(line).ToArray();

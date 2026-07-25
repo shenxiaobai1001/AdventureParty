@@ -1,25 +1,25 @@
 using UnityEngine;
 
 /// <summary>
-/// Local pose for a weapon parented to hand grip sockets.
+/// Local pose offsets when a weapon is parented to a hand socket.
+/// Shield / bow poses are owned by dedicated sockets (identity here).
+/// Long/short guns use identity (no forced 90° tilt).
 /// </summary>
 public static class WeaponHandLayout
 {
-    public static void Apply(Transform weaponRoot, WeaponCategory category, bool isOffHand = false)
+    public static void Apply(Transform weapon, WeaponCategory category, bool isOffHand)
     {
-        if (!weaponRoot)
+        if (!weapon)
             return;
 
-        weaponRoot.localPosition = Vector3.zero;
-        weaponRoot.localRotation = Quaternion.identity;
+        weapon.localPosition = Vector3.zero;
+        weapon.localRotation = Quaternion.identity;
+        weapon.localScale = Vector3.one;
 
-        if (category == WeaponCategory.Shield && isOffHand)
-            weaponRoot.localRotation = Quaternion.Euler(0f, 180f, 0f);
-
-        if (category == WeaponCategory.FirearmPistol)
-        {
-            var yaw = isOffHand ? -90f : 90f;
-            weaponRoot.localRotation = Quaternion.Euler(0f, yaw, 0f);
-        }
+        if (category == WeaponCategory.Shield
+            || category == WeaponCategory.Bow
+            || category == WeaponCategory.LongGun
+            || category == WeaponCategory.ShortGun)
+            return;
     }
 }

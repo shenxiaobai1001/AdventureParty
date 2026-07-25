@@ -72,7 +72,8 @@ public class CombatMoveSlotConfigData : Singleton<CombatMoveSlotConfigData>
         var hasShield = HasShield(loadout);
         if (hasShield && IsRollSlot(slotId))
         {
-            if (TryGetRaw(CombatMoveStance.Shield, slotId, out var disabledRoll))
+            if (TryGetRaw(CombatMoveStance.SwordShield, slotId, out var disabledRoll)
+                && disabledRoll.IsDisabled())
             {
                 resolved = disabledRoll;
                 return true;
@@ -81,27 +82,27 @@ public class CombatMoveSlotConfigData : Singleton<CombatMoveSlotConfigData>
             return false;
         }
 
-        if (hasShield && slotId == "melee.block")
-        {
-            if (TryGetRaw(CombatMoveStance.Shield, slotId, out var shieldBlock))
-            {
-                resolved = ExpandShared(shieldBlock);
-                return resolved != null;
-            }
-        }
-
-        if (preferShieldBash
-            && hasShield
-            && (slotId == "melee.attack_a" || slotId == "melee.attack_b"))
-        {
-            if (TryGetRaw(CombatMoveStance.Shield, slotId, out var shieldBash))
-            {
-                resolved = ExpandShared(shieldBash);
-                return resolved != null;
-            }
-        }
-
         var stance = CombatMoveStanceResolver.ResolvePrimaryStance(loadout);
+        var dual = loadout != null && loadout.gripMode == CombatGripMode.DualWield;
+
+        // Dual uses Dual block-hit / break variants when present.
+        if (dual)
+        {
+            if (slotId == "react.block_hit"
+                && TryGetRaw(CombatMoveStance.SharedArmed, "react.block_hit_dual", out var dualHit))
+            {
+                resolved = dualHit;
+                return true;
+            }
+
+            if (slotId == "react.block_break"
+                && TryGetRaw(CombatMoveStance.SharedArmed, "react.block_break_dual", out var dualBreak))
+            {
+                resolved = dualBreak;
+                return true;
+            }
+        }
+
         if (!TryGetRaw(stance, slotId, out var raw))
         {
             // Fallback: ranged.dodge.* → SharedArmed melee.dodge.*
@@ -115,11 +116,37 @@ public class CombatMoveSlotConfigData : Singleton<CombatMoveSlotConfigData>
                 }
             }
 
+            // Reaction slots: 1H / martial fall back to shared tables.
+            if (slotId.StartsWith("react.", StringComparison.Ordinal)
+                && TryResolveReactionFallback(stance, slotId, out var reactFallback))
+            {
+                resolved = reactFallback;
+                return true;
+            }
+
             return false;
         }
 
         resolved = ExpandShared(raw);
         return resolved != null;
+    }
+
+    bool TryResolveReactionFallback(CombatMoveStance stance, string slotId, out CombatMoveSlotRow row)
+    {
+        row = null;
+        switch (stance)
+        {
+            case CombatMoveStance.MartialArts:
+                return TryGetRaw(CombatMoveStance.SharedUnarmed, slotId, out row);
+            case CombatMoveStance.OneHandSingle:
+            case CombatMoveStance.DualBlades:
+            case CombatMoveStance.DualHeavy:
+            case CombatMoveStance.RangedPistol:
+            case CombatMoveStance.RangedThrowing:
+                return TryGetRaw(CombatMoveStance.SharedArmed, slotId, out row);
+            default:
+                return false;
+        }
     }
 
     public CombatMoveSlotRow ExpandShared(CombatMoveSlotRow row)
@@ -133,9 +160,8 @@ public class CombatMoveSlotConfigData : Singleton<CombatMoveSlotConfigData>
 
         if (string.Equals(asset, SharedArmedKickRef, StringComparison.OrdinalIgnoreCase))
         {
-            return TryGetRaw(CombatMoveStance.SharedArmed, "melee.guard_break", out var kick)
-                ? kick
-                : row;
+            // Guard-break / kick slots removed from templates.
+            return row;
         }
 
         if (string.Equals(asset, SharedArmedBlockDualRef, StringComparison.OrdinalIgnoreCase))
@@ -195,11 +221,7 @@ public class CombatMoveSlotConfigData : Singleton<CombatMoveSlotConfigData>
     }
 
     static bool HasShield(ResolvedCombatLoadout loadout)
-    {
-        return loadout != null
-            && loadout.offHand != null
-            && loadout.offHand.category == WeaponCategory.Shield;
-    }
+        => loadout != null && loadout.HasShield;
 
     void BuildIndex()
     {
@@ -248,6 +270,7 @@ public class CombatMoveSlotRow : NamedData
     public bool IsDisabled()
         => ContainsFlag("disabled")
            || string.Equals(animAsset, "—", StringComparison.Ordinal)
+           || string.Equals(animAsset, "-", StringComparison.Ordinal)
            || string.Equals(unlock, "none", StringComparison.OrdinalIgnoreCase);
 
     public bool IsUiOnly()
@@ -295,7 +318,7 @@ public class CombatMoveSlotRow : NamedData
 }
 
 /// <summary>
-/// Maps a resolved loadout to the primary combat-move stance template.
+/// Maps left/right loadout to the primary combat-move animation template.
 /// </summary>
 public static class CombatMoveStanceResolver
 {
@@ -307,11 +330,18 @@ public static class CombatMoveStanceResolver
         switch (loadout.gripMode)
         {
             case CombatGripMode.DualWield:
-                return CombatMoveStance.OneHandDual;
+                return ResolveDual(loadout.rightHand, loadout.leftHand);
+
+            case CombatGripMode.OneHandPlusOffHand:
+                if (loadout.HasShield)
+                    return CombatMoveStance.SwordShield;
+                if (loadout.primaryHand.category == WeaponCategory.ShortGun
+                    || (loadout.offHand && loadout.offHand.category == WeaponCategory.ShortGun))
+                    return CombatMoveStance.RangedPistol;
+                return CombatMoveStance.OneHandSingle;
 
             case CombatGripMode.OneHanded:
-            case CombatGripMode.OneHandPlusOffHand:
-                return ResolveOneHandOrRangedSidearm(loadout.primaryHand);
+                return ResolveOneHanded(loadout);
 
             case CombatGripMode.TwoHanded:
                 return ResolveTwoHanded(loadout.primaryHand);
@@ -321,58 +351,59 @@ public static class CombatMoveStanceResolver
         }
     }
 
-    static CombatMoveStance ResolveOneHandOrRangedSidearm(SyntyWeaponItemData weapon)
+    static CombatMoveStance ResolveDual(SyntyWeaponItemData right, SyntyWeaponItemData left)
     {
+        if (right && left
+            && WeaponProficiencyMapper.IsEdged(right.category)
+            && WeaponProficiencyMapper.IsEdged(left.category))
+            return CombatMoveStance.DualBlades;
+
+        return CombatMoveStance.DualHeavy;
+    }
+
+    static CombatMoveStance ResolveOneHanded(ResolvedCombatLoadout loadout)
+    {
+        var weapon = loadout.primaryHand;
         if (!weapon)
             return CombatMoveStance.OneHandSingle;
 
         if (WeaponProficiencyMapper.GetProficiencyType(weapon) == WeaponProficiencyType.Throwing)
             return CombatMoveStance.RangedThrowing;
 
-        switch (weapon.category)
-        {
-            case WeaponCategory.FirearmPistol:
-                return CombatMoveStance.RangedPistol;
-            default:
-                return CombatMoveStance.OneHandSingle;
-        }
+        if (weapon.category == WeaponCategory.ShortGun)
+            return CombatMoveStance.RangedPistol;
+
+        if (weapon.category == WeaponCategory.Shield)
+            return CombatMoveStance.SwordShield;
+
+        // Single 1H melee, left empty → dedicated OneHandSingle (RPG) template.
+        return CombatMoveStance.OneHandSingle;
     }
 
     static CombatMoveStance ResolveTwoHanded(SyntyWeaponItemData weapon)
     {
         if (!weapon)
-            return CombatMoveStance.GreatSword2H;
-
-        if (WeaponProficiencyMapper.GetProficiencyType(weapon) == WeaponProficiencyType.Throwing)
-            return CombatMoveStance.RangedThrowing;
+            return CombatMoveStance.GreatSword;
 
         switch (weapon.category)
         {
-            case WeaponCategory.GreatSword2H:
-                return CombatMoveStance.GreatSword2H;
-            case WeaponCategory.HeavyWeapon2H:
+            case WeaponCategory.GreatSword:
+                return CombatMoveStance.GreatSword;
+            case WeaponCategory.GreatHammer:
+            case WeaponCategory.GreatAxe:
                 return CombatMoveStance.HeavyWeapon2H;
-            case WeaponCategory.Polearm2H:
-                return CombatMoveStance.Polearm2H;
+            case WeaponCategory.Spear:
+                return CombatMoveStance.Spear;
+            case WeaponCategory.Staff:
+                return CombatMoveStance.Staff;
             case WeaponCategory.Bow:
-                return ResolveBowOrCrossbow(weapon);
-            case WeaponCategory.FirearmRifle:
+                return CombatMoveStance.RangedBow;
+            case WeaponCategory.Crossbow:
+                return CombatMoveStance.RangedCrossbow;
+            case WeaponCategory.LongGun:
                 return CombatMoveStance.RangedRifle;
             default:
-                return CombatMoveStance.GreatSword2H;
+                return CombatMoveStance.GreatSword;
         }
-    }
-
-    static CombatMoveStance ResolveBowOrCrossbow(SyntyWeaponItemData weapon)
-    {
-        if (!weapon)
-            return CombatMoveStance.RangedBow;
-
-        var label = (weapon.itemName ?? string.Empty) + " " + (weapon.syntyPrefabPath ?? string.Empty);
-        if (label.IndexOf("crossbow", StringComparison.OrdinalIgnoreCase) >= 0
-            || label.IndexOf("弩", StringComparison.OrdinalIgnoreCase) >= 0)
-            return CombatMoveStance.RangedCrossbow;
-
-        return CombatMoveStance.RangedBow;
     }
 }

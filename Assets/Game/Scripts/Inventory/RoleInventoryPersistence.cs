@@ -37,27 +37,36 @@ public static class RoleInventoryPersistence
         if (!inventory)
             return;
 
-        inventory.ClearAllItems();
-
-        if (data == null || data.items == null)
-            return;
-
-        foreach (var record in data.items)
+        var wasSuspended = WeaponInventoryBridge.SuspendWeaponSync;
+        WeaponInventoryBridge.SuspendWeaponSync = true;
+        try
         {
-            if (!record.itemData || string.IsNullOrEmpty(record.gridId))
-                continue;
+            inventory.ClearAllItems();
 
-            var gridId = RoleInventoryTypes.NormalizeGridId(record.gridId);
-            var grid = inventory.FindGridByName(gridId);
-            if (!grid)
-                continue;
+            if (data == null || data.items == null)
+                return;
 
-            inventory.PlaceItemInGrid(
-                grid,
-                record.position,
-                record.itemData,
-                Mathf.Max(1, record.stackCount),
-                record.rotated);
+            foreach (var record in data.items)
+            {
+                if (!record.itemData || string.IsNullOrEmpty(record.gridId))
+                    continue;
+
+                var gridId = RoleInventoryTypes.NormalizeGridId(record.gridId);
+                var grid = inventory.FindGridByName(gridId);
+                if (!grid)
+                    continue;
+
+                inventory.PlaceItemInGrid(
+                    grid,
+                    record.position,
+                    record.itemData,
+                    Mathf.Max(1, record.stackCount),
+                    record.rotated);
+            }
+        }
+        finally
+        {
+            WeaponInventoryBridge.SuspendWeaponSync = wasSuspended;
         }
     }
 
